@@ -1,0 +1,20 @@
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+$text-dark: #1e293b;
+$text-muted: #64748b;
+$border: #e2e8f0;
+$white: #ffffff;
+
+// ─── Page layout ──────────────────────────────────────────────────────────────
+.mainMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    h1 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: $text-dark;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid $border;
+    }
+}

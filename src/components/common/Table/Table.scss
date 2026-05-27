@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+$white: #ffffff;
+$bg: #f0f4f8;
+$border: #e2e8f0;
+$text-dark: #1e293b;
+$text-muted: #64748b;
+$primary: #3b82f6;
+$primary-soft: #eff6ff;
+$row-hover: #f8fafc;
+$shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+
+// ─── Table wrapper ────────────────────────────────────────────────────────────
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    background: $white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: $shadow;
+    border: 1px solid $border;
+
+    // ─── Header ───────────────────────────────────────────────────────────────
+    thead tr {
+        background: $bg;
+        border-bottom: 1px solid $border;
+    }
+
+    th {
+        padding: 0.85rem 1rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.78rem;
+        color: $text-muted;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+
+        &:last-child {
+            text-align: center;
+        }
+    }
+
+    // ─── Body ─────────────────────────────────────────────────────────────────
+    tbody tr {
+        border-bottom: 1px solid $border;
+        transition: background 0.15s ease;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            background: $row-hover;
+        }
+    }
+
+    td {
+        padding: 0.85rem 1rem;
+        color: $text-dark;
+        vertical-align: middle;
+
+        &:last-child {
+            text-align: center;
+        }
+    }
+}

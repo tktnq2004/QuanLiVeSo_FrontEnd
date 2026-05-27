@@ -1,0 +1,119 @@
+import { useEffect, useState } from 'react';
+
+import phieuService from '../../../services/phieu.service';
+
+import PhieuModal from './PhieuModal';
+import PhieuTable from './PhieuTable';
+
+import Button from '../../common/Button/Button';
+import Loading from '../../common/Loading/Loading';
+
+import { toast } from 'react-toastify';
+
+const PhieuList = () => {
+
+    const [phieus, setPhieus] = useState([]);
+
+    const [loading, setLoading] = useState(false);
+
+    const [showModal, setShowModal] = useState(false);
+
+    const fetchData = async () => {
+
+        try {
+
+            setLoading(true);
+
+            const data = await phieuService.getAll();
+
+            setPhieus(data);
+
+        } catch (err) {
+
+            toast.error('Không thể tải dữ liệu');
+
+        } finally {
+
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleDelete = async (id) => {
+
+        const confirmDelete = window.confirm(
+            'Bạn có chắc muốn hủy phiếu?'
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+
+            await phieuService.remove(id);
+
+            toast.success('Hủy phiếu thành công');
+
+            fetchData();
+
+        } catch (err) {
+
+            toast.error(
+                err?.response?.data?.message ||
+                'Không thể hủy phiếu'
+            );
+        }
+    };
+
+    if (loading) {
+        return <Loading />;
+    }
+
+    return (
+
+        <div>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '20px'
+                }}
+            >
+
+                <Button
+                    onClick={() => setShowModal(true)}
+                >
+                    Tạo Phiếu
+                </Button>
+            </div>
+
+            <PhieuTable
+                phieus={phieus}
+                onDelete={handleDelete}
+            />
+
+            {
+                showModal && (
+
+                    <PhieuModal
+                        onClose={() =>
+                            setShowModal(false)
+                        }
+                        onSuccess={() => {
+
+                            fetchData();
+
+                            setShowModal(false);
+                        }}
+                    />
+                )
+            }
+
+        </div>
+    );
+};
+
+export default PhieuList;
