@@ -11,21 +11,18 @@ const getById = async (id) => {
 };
 
 const create = async (data) => {
-    return  api.post('/capve', data);
+    const response = await api.post('/capve', data);
+    return response.data;
 };
 
 const update = async (id, data) => {
-    return api.put(`/capve/${id}`, data);
-}
+    const response = await api.put(`/capve/${id}`, data);
+    return response.data;
+};
 
 const remove = async (id) => {
-    return api.delete(`/capve/${id}`);
+    const response = await api.delete(`/capve/${id}`);
+    return response.data;
 };
 
-export default {
-    getAll,
-    getById,
-    create,
-    update,
-    remove
-};
+export default { getAll, getById, create, update, remove };

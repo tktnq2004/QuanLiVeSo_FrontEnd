@@ -1,0 +1,13 @@
+.tknhap-search {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap; // xuống dòng khi màn hình nhỏ
+    margin-bottom: 16px;
+
+    .input-group,
+    .select-group {
+        min-width: 160px;
+        flex: 1;
+    }
+}

@@ -17,6 +17,11 @@ import BanVe from './views/nghiepvu/BanVe';
 import ThuVe from './views/nghiepvu/ThuVe';
 import ThuTien from './views/nghiepvu/ThuTien';
 import ChiTien from './views/nghiepvu/ChiTien';
+import TKNhap from './views/baocao/thongkenhap';
+import TKBan from './views/baocao/thongkeban';
+import TKChi from './views/baocao/thongkechi';
+import TKThu from './views/baocao/thongkethu';
+import TKLoiNhuan from './views/baocao/thongkeloinhuan';
 const App = () => {
     return (
         <BrowserRouter>
@@ -38,6 +43,11 @@ const App = () => {
                     <Route path="/ChiTien" element={<ChiTien />} />
                     <Route path="/Phieu" element={<Phieu />} />
                     <Route path="/SoCai" element={<SoCai />} />
+                    <Route path="/ThongKeNhap" element={<TKNhap />} />
+                    <Route path="/ThongKeBan" element={<TKBan />} />
+                    <Route path="/ThongKeChi" element={<TKChi />} />
+                    <Route path="/ThongKeThu" element={<TKThu />} />
+                    <Route path="/ThongKeLoiNhuan" element={<TKLoiNhuan />} />
                 </Route>
 
             </Routes>

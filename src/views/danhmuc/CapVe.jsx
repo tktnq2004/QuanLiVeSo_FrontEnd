@@ -5,7 +5,7 @@ const Products = () => {
     return (
         <div className='mainMenu'>
 
-            <h1>Product Management</h1>
+            <h1>Quản lí Vé số</h1>
 
             <ProductList />
 

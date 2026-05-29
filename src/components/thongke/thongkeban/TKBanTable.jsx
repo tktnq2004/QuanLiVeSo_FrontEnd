@@ -1,10 +1,8 @@
 import Table from '../../common/Table/Table';
 
-import Button from '../../common/Button/Button';
-
 import formatCurrency from '../../../untils/formatCurrency';
 
-const SoCaiTable = ({
+const TKBanTable = ({
     records,
     handleDelete
 }) => {
@@ -33,7 +31,11 @@ const SoCaiTable = ({
 
         {
             key: 'MaDoiTac',
-            title: 'Mã NCC'
+            title: 'Mã KH'
+        },
+        {
+            key: 'TenDoiTac',
+            title: 'Khách hàng'
         },
 
         {
@@ -57,32 +59,19 @@ const SoCaiTable = ({
         },
 
         {
-            key: 'ThucNhap',
-            title: 'Thực nhập'
+            key: 'ThucBan',
+            title: 'Thực Bán'
         }
     ];
-
 
     return (
 
         <Table
             columns={columns}
-            data={records.map(item => ({
-                ...item,
-            }))}
-            renderActions={(item) => (
+            data={records}
 
-                <Button
-                    variant="danger"
-                    onClick={() =>
-                        handleDelete(item.ID)
-                    }
-                >
-                    Delete
-                </Button>
-            )}
         />
     );
 };
 
-export default SoCaiTable;
+export default TKBanTable;

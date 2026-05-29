@@ -27,6 +27,11 @@ const nghiepVuItems = [
 ];
 
 const baoCaoItems = [
+    { to: '/ThongKeNhap', icon: Receipt, label: 'Thống kê nhập' },
+    { to: '/ThongKeBan', icon: Receipt, label: 'Thống kê bán' },
+    { to: '/ThongKeChi', icon: Receipt, label: 'Thống kê chi' },
+    { to: '/ThongKeThu', icon: Receipt, label: 'Thống kê thu' },
+    { to: '/ThongKeLoiNhuan', icon: Receipt, label: 'Thống kê lợi nhuận' },
     { to: '/Phieu', icon: Ticket,  label: 'Phiếu' },
     { to: '/SoCai', icon: Receipt, label: 'Sổ Cái' },
 ];
