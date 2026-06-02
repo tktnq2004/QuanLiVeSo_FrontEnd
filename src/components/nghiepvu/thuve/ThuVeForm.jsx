@@ -1,83 +1,87 @@
-import Input from "../../common/Input/Input";
-import Select from "../../common/Select/Select";
-import { useState } from "react";
+import { useState } from 'react';
+import Input from '../../common/Input/Input';
+import Select from '../../common/Select/Select';
 
-const ThuVeForm = ({ dotPhatHanh, nhaCungCap, formData, onChange }) => {
+const ThuVeForm = ({ khachHang, formData, onChange }) => {
 
-    const [selectedNCC, setSelectedNCC] = useState(null);
+    const [selectedKH, setSelectedKH] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         onChange(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleNCCChange = (e) => {
+    const handleKHChange = (e) => {
         const { value } = e.target;
-
-        onChange(prev => ({ ...prev, MaNCC: value }));
-
-        const found = nhaCungCap.find((item) => item.MaDoiTac === value);
-        setSelectedNCC(found || null);
+        onChange(prev => ({ ...prev, MaDoiTac: value }));
+        const found = khachHang.find(item => item.MaDoiTac === value);
+        setSelectedKH(found || null);
     };
 
     return (
-        <form className="thuve-form">
+        <div className="thuve-form">
 
             <Select
-                label="Nhà cung cấp"
-                name="MaNCC"
-                value={formData.MaNCC}
-                onChange={handleNCCChange}
-                options={nhaCungCap}
+                label="Khách hàng"
+                name="MaDoiTac"
+                value={formData.MaDoiTac}
+                onChange={handleKHChange}
+                options={khachHang}
                 valueField="MaDoiTac"
                 labelField="TenDoiTac"
             />
 
             <Input
-                label="Mã nhà cung cấp"
-                value={selectedNCC?.MaNCC || ''}
+                label="Mã đối tác"
+                value={selectedKH?.MaDoiTac || ''}
                 disabled
             />
 
             <Input
                 label="Địa chỉ"
-                value={selectedNCC?.DiaChi || ''}
+                value={selectedKH?.DiaChi || ''}
                 disabled
             />
 
             <Input
                 label="Điện thoại"
-                value={selectedNCC?.DienThoai || ''}
+                value={selectedKH?.DienThoai || ''}
                 disabled
             />
 
             <Input
                 label="Số tài khoản"
-                value={selectedNCC?.SoTaiKhoan || ''}
+                value={selectedKH?.SoTaiKhoan || ''}
                 disabled
             />
 
             <Input
                 label="Tên chủ sở hữu"
-                value={selectedNCC?.TenChuSoHuu || ''}
+                value={selectedKH?.TenChuSoHuu || ''}
                 disabled
             />
 
             <Input
                 label="Tên ngân hàng"
-                value={selectedNCC?.TenNganHang || ''}
+                value={selectedKH?.TenNganHang || ''}
                 disabled
             />
 
             <Input
                 type="date"
                 label="Ngày giao"
-                name="NgayTao"
-                value={formData.NgayTao}
+                name="NgayGiao"
+                value={formData.NgayGiao}
                 onChange={handleChange}
             />
 
-        </form>
+            <Input
+                label="Số CT"
+                value={selectedKH?.SoCT || ''}
+                disabled
+            />
+
+        </div>
     );
 };
 

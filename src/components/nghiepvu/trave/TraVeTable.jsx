@@ -1,46 +1,47 @@
-// NhapVeTable.jsx
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
 const columns = [
-    { label: 'Mã kỳ sổ',  field: 'MaKySo',   type: 'select' },
-    { label: 'Vé ế',       field: 'VeE' },
-    { label: 'Đơn giá',    field: 'DonGia' },
-    { label: 'TT nhập',    field: 'TTNhap',   disabled: true },  // auto
-    { label: 'Ghi chú',    field: 'GhiChu' }
+    { label: 'Đợt phát hành', field: 'MaDot',  type: 'select' },
+    { label: 'Vé ế trả',      field: 'VeE' },
+    { label: 'Đơn giá',       field: 'DonGia' },
+    { label: 'TT trả',        field: 'TTTra',  disabled: true },
+    { label: 'Ghi chú',       field: 'GhiChu' },
 ];
 
+// TTTra = VeE × DonGia (backend sẽ tính chính xác, đây chỉ để hiển thị)
 const calcRow = (row) => {
 
-    const veE     = parseFloat(row.VeE)     || 0;
-    const donGia  = parseFloat(row.DonGia)  || 0;
+    const veE    = parseFloat(row.VeE)    || 0;
+    const donGia = parseFloat(row.DonGia) || 0;
 
-    const ttNhap   = veE * donGia / 100;
+    const ttTra = veE * donGia / 100;
 
     return {
         ...row,
-        TTNhap:   ttNhap   || ''
+        TTTra: ttTra || '',
     };
 };
 
-const NhapVeTable = ({
-    kyXoOptions = [],
+const TraVeTable = ({
+    dotPhatHanh = [],
     rows,
     selectedRowId,
     onRowsChange,
     onSelectRow,
-    emptyRow
+    emptyRow,
 }) => {
 
     const handleChange = (rowId, field, value) => {
 
         const updated = rows.map(row =>
             row.id === rowId
-                ? calcRow({ ...row, [field]: value }) 
+                ? calcRow({ ...row, [field]: value })
                 : row
         );
 
-        if (field === 'MaKySo' && value) {
+        // Tự thêm dòng mới khi chọn MaDot ở dòng cuối
+        if (field === 'MaDot' && value) {
             const isLastRow = rows[rows.length - 1].id === rowId;
             if (isLastRow) {
                 onRowsChange([...updated, emptyRow()]);
@@ -60,16 +61,16 @@ const NhapVeTable = ({
                     onChange={(e) =>
                         handleChange(row.id, col.field, e.target.value)
                     }
-                    options={kyXoOptions}
-                    valueField="MaKyXo"
-                    labelField="MaKyXo"
+                    options={dotPhatHanh}
+                    valueField="MaDot"
+                    labelField="DienGiai"
                 />
             );
         }
 
         return (
             <Input
-                value={row[col.field]}
+                value={row[col.field] ?? ''}
                 disabled={col.disabled}
                 onChange={(e) =>
                     handleChange(row.id, col.field, e.target.value)
@@ -79,34 +80,36 @@ const NhapVeTable = ({
     };
 
     return (
-        <table className="nhapve-table">
-            <thead>
-                <tr>
-                    {columns.map(col => (
-                        <th key={col.field}>{col.label}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {rows.map(row => (
-                    <tr
-                        key={row.id}
-                        className={`nhapve-table__row ${selectedRowId === row.id ? 'nhapve-table__row--selected' : ''}`}
-                        onClick={() => onSelectRow(row.id)}
-                    >
+        <div className="trave-table-wrapper">
+            <table className="trave-table">
+                <thead>
+                    <tr>
                         {columns.map(col => (
-                            <td
-                                key={col.field}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                {renderCell(col, row)}
-                            </td>
+                            <th key={col.field}>{col.label}</th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {rows.map(row => (
+                        <tr
+                            key={row.id}
+                            className={`trave-table__row ${selectedRowId === row.id ? 'trave-table__row--selected' : ''}`}
+                            onClick={() => onSelectRow(row.id)}
+                        >
+                            {columns.map(col => (
+                                <td
+                                    key={col.field}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {renderCell(col, row)}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
 
-export default NhapVeTable;
+export default TraVeTable;

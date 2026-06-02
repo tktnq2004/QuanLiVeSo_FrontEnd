@@ -9,23 +9,28 @@ const getById = async (id) => {
     const response = await api.get(`/dotphathanh/${id}`);
     return response.data;
 };
-    
+
 const create = async (data) => {
-    return await api.post('/dotphathanh', data);
+    const response = await api.post('/dotphathanh', data);
+    return response.data;
 };
 
 const update = async (id, data) => {
-    return await api.put(`/dotphathanh/${id}`, data);
-}
-
-const remove = async (id) => {
-    return await api.delete(`/dotphathanh/${id}`);
+    const response = await api.put(`/dotphathanh/${id}`, data);
+    return response.data;
 };
 
-export default {
+const remove = async (id) => {
+    const response = await api.delete(`/dotphathanh/${id}`);
+    return response.data;
+};
+
+const dotPhatHanhService = {
     getAll,
     getById,
     create,
     update,
-    remove
+    remove,
 };
+
+export default dotPhatHanhService;

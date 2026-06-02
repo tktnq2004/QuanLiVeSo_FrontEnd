@@ -1,34 +1,34 @@
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
 const columns = [
-    { label: 'Mã kỳ sổ', field: 'MaKySo', type: 'select' },
-    { label: 'Vé ế', field: 'VeE' },
-    { label: 'Đơn giá', field: 'DonGia' },
-    { label: 'TT nhập', field: 'TTNhap', disabled: true },  
-    { label: 'Ghi chú', field: 'GhiChu' }
+    { label: 'Đợt phát hành', field: 'MaDot',  type: 'select' },
+    { label: 'Vé thu về',     field: 'VeE' },
+    { label: 'Đơn giá',       field: 'DonGia' },
+    { label: 'TT thu',        field: 'TTThu',  disabled: true },
+    { label: 'Ghi chú',       field: 'GhiChu' },
 ];
 
 const calcRow = (row) => {
 
-    const veE = parseFloat(row.VeE) || 0;
+    const veE    = parseFloat(row.VeE)    || 0;
     const donGia = parseFloat(row.DonGia) || 0;
 
-    const ttNhap = veE * donGia / 100;
+    const ttThu = veE * donGia;
 
     return {
         ...row,
-        TTNhap: ttNhap || ''
+        TTThu: ttThu || '',
     };
 };
 
 const ThuVeTable = ({
-    kyXoOptions = [],
+    dotPhatHanh = [],
     rows,
     selectedRowId,
     onRowsChange,
     onSelectRow,
-    emptyRow
+    emptyRow,
 }) => {
 
     const handleChange = (rowId, field, value) => {
@@ -39,7 +39,7 @@ const ThuVeTable = ({
                 : row
         );
 
-        if (field === 'MaKySo' && value) {
+        if (field === 'MaDot' && value) {
             const isLastRow = rows[rows.length - 1].id === rowId;
             if (isLastRow) {
                 onRowsChange([...updated, emptyRow()]);
@@ -59,16 +59,16 @@ const ThuVeTable = ({
                     onChange={(e) =>
                         handleChange(row.id, col.field, e.target.value)
                     }
-                    options={kyXoOptions}
-                    valueField="MaKyXo"
-                    labelField="MaKyXo"
+                    options={dotPhatHanh}
+                    valueField="MaDot"
+                    labelField="DienGiai"
                 />
             );
         }
 
         return (
             <Input
-                value={row[col.field]}
+                value={row[col.field] ?? ''}
                 disabled={col.disabled}
                 onChange={(e) =>
                     handleChange(row.id, col.field, e.target.value)
@@ -78,33 +78,35 @@ const ThuVeTable = ({
     };
 
     return (
-        <table className="nhapve-table">
-            <thead>
-                <tr>
-                    {columns.map(col => (
-                        <th key={col.field}>{col.label}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {rows.map(row => (
-                    <tr
-                        key={row.id}
-                        className={`nhapve-table__row ${selectedRowId === row.id ? 'nhapve-table__row--selected' : ''}`}
-                        onClick={() => onSelectRow(row.id)}
-                    >
+        <div className="thuve-table-wrapper">
+            <table className="thuve-table">
+                <thead>
+                    <tr>
                         {columns.map(col => (
-                            <td
-                                key={col.field}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                {renderCell(col, row)}
-                            </td>
+                            <th key={col.field}>{col.label}</th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {rows.map(row => (
+                        <tr
+                            key={row.id}
+                            className={`thuve-table__row ${selectedRowId === row.id ? 'thuve-table__row--selected' : ''}`}
+                            onClick={() => onSelectRow(row.id)}
+                        >
+                            {columns.map(col => (
+                                <td
+                                    key={col.field}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {renderCell(col, row)}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
 

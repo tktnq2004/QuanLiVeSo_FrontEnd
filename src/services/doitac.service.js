@@ -8,29 +8,35 @@ const getAll = async () => {
 const getById = async (id) => {
     const response = await api.get(`/doitac/${id}`);
     return response.data;
-}
+};
 
 const create = async (data) => {
-    return await api.post('/doitac', data);
+    const response = await api.post('/doitac', data);
+    return response.data;
 };
 
 const update = async (id, data) => {
-    return await api.put(`/doitac/${id}`, data);
+    const response = await api.put(`/doitac/${id}`, data);
+    return response.data;
 };
 
 const remove = async (id) => {
-    return await api.delete(`/doitac/${id}`);
+    const response = await api.delete(`/doitac/${id}`);
+    return response.data;
 };
 
 const getCongNo = async (id) => {
     const response = await api.get(`/doitac/${id}/congno`);
     return response.data;
-}
-export default {
+};
+
+const doiTacService = {
     getAll,
     getById,
     create,
     update,
     remove,
-    getCongNo
+    getCongNo,
 };
+
+export default doiTacService;

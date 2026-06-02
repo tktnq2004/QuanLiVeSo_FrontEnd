@@ -25,4 +25,12 @@ const remove = async (id) => {
     return response.data;
 };
 
-export default { getAll, getById, create, update, remove };
+const capVeService = {
+    getAll,
+    getById,
+    create,
+    update,
+    remove,
+};
+
+export default capVeService;

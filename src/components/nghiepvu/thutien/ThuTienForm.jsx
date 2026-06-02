@@ -1,112 +1,107 @@
 import { useEffect, useState } from 'react';
 
-import thutienService from '../../../services/thutien.service';
+import socaiService from '../../../services/socai.service';
 
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
 import Select from '../../common/Select/Select';
 
+const LOAI_THU_TIEN = 5;
 
 const initialState = {
-    KhachHang: '',
-    MaKH: '',
-    NgayTao: new Date().toISOString().split('T')[0],
-    SoTien: '',
-    HTTT: '',
-    DiaChi: '',
-    SoCT: '',
+    MaDoiTac: '',
+    NgayGiao: new Date().toISOString().split('T')[0],
+    TienTra:  '',
+    MaHT:     '',
+    SoCT:     '',
+    GhiChu:   '',
+    // readonly — auto fill từ đối tác
+    DiaChi:    '',
     DienThoai: '',
-    GhiChu: ''
 };
 
-const ThuTienForm = ({
-    khachHangs,
-    httts,
-    selectedThuTien,
-    onSuccess
-}) => {
+const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
 
     const [formData, setFormData] = useState(initialState);
+    const [loading,  setLoading]  = useState(false);
 
-    const [loading, setLoading] = useState(false);
-
-    // EDIT MODE
     useEffect(() => {
-
         if (selectedThuTien) {
-
             setFormData({
-                ...selectedThuTien,
+                MaDoiTac:  selectedThuTien.MaDoiTac  || '',
+                NgayGiao:  selectedThuTien.NgayGiao   || '',
+                TienTra:   selectedThuTien.TienTra    || '',
+                MaHT:      selectedThuTien.MaHT       || '',
+                SoCT:      selectedThuTien.SoCT       || '',
+                GhiChu:    selectedThuTien.GhiChu     || '',
+                DiaChi:    selectedThuTien.DiaChi     || '',
+                DienThoai: selectedThuTien.DienThoai  || '',
             });
-
         } else {
-
             setFormData(initialState);
-
         }
-
     }, [selectedThuTien]);
 
-    // INPUT
-    const handleChange = (event) => {
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
-        const { name, value } = event.target;
-
+    // Auto-fill thông tin khi chọn khách hàng
+    const handleKHChange = (e) => {
+        const { value } = e.target;
+        const found = khachHangs.find(kh => kh.MaDoiTac === value);
         setFormData(prev => ({
             ...prev,
-            [name]: value
+            MaDoiTac:  value,
+            DiaChi:    found?.DiaChi    || '',
+            DienThoai: found?.DienThoai || '',
         }));
     };
 
-    // SUBMIT
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-        event.preventDefault();
+        if (!formData.MaDoiTac) {
+            alert('Vui lòng chọn khách hàng');
+            return;
+        }
+        if (!formData.TienTra || Number(formData.TienTra) <= 0) {
+            alert('Vui lòng nhập số tiền hợp lệ');
+            return;
+        }
+        if (!formData.NgayGiao) {
+            alert('Vui lòng chọn ngày giao');
+            return;
+        }
 
         try {
-
-            if (!formData.MaCap.trim()) {
-                alert('Mã cặp vé không được để trống');
-                return;
-            }
-
-            if (!formData.TenCap.trim()) {
-                alert('Tên cặp vé không được để trống');
-                return;
-            }
-
             setLoading(true);
 
             if (selectedThuTien) {
-
-                await thutienService.update(
-                    formData.MaCap,
-                    formData
-                );
-
-            } else {
-
-                await thutienService.create(formData);
-
+                // Thu tiền không có update — xóa rồi tạo lại
+                // hoặc tuỳ nghiệp vụ thực tế
+                alert('Chức năng chỉnh sửa chưa hỗ trợ');
+                return;
             }
+
+            await socaiService.createPhieu({
+                NgayGiao: formData.NgayGiao,
+                MaDoiTac: formData.MaDoiTac,
+                Loai:     LOAI_THU_TIEN,
+                TienTra:  Number(formData.TienTra),
+                MaHT:     formData.MaHT     || null,
+                SoCT:     formData.SoCT     || null,
+                GhiChu:   formData.GhiChu   || null,
+            });
 
             setFormData(initialState);
-
-            if (onSuccess) {
-                onSuccess();
-            }
+            if (onSuccess) onSuccess();
 
         } catch (err) {
-
-            alert(
-                err?.response?.data?.message ||
-                'Có lỗi xảy ra'
-            );
-
+            alert(err?.response?.data?.message || 'Có lỗi xảy ra');
         } finally {
-
             setLoading(false);
-
         }
     };
 
@@ -114,92 +109,69 @@ const ThuTienForm = ({
         <form onSubmit={handleSubmit}>
 
             <Select
-                name="KhachHang"
-                value={formData.KhachHang}
-                onChange={handleChange}
-                options={khachHangs}
-                valueField="MaKH"
-                labelField="TenKH"
-            />
-
-            <Input
-                type="text"
+                label="Khách hàng"
                 name="MaDoiTac"
-                placeholder="Mã KH"
-                value={formData.MaKH}
-                onChange={handleChange}
-                disabled={!!selectedThuTien}
-            />
-
-            <Select
-                name="HTTT"
-                value={formData.HTTT}
-                onChange={handleChange}
-                options={httts}
-                valueField="MaHTTT"
-                labelField="TenHTTT"
-            />
-
-            <Input
-                type="date"
-                label="Ngày giao"
-                name="NgayTao"
-                value={formData.NgayTao}
-                onChange={handleChange}
+                value={formData.MaDoiTac}
+                onChange={handleKHChange}
+                options={khachHangs}
+                valueField="MaDoiTac"
+                labelField="TenDoiTac"
             />
 
             <Input
                 label="Địa chỉ"
-                name="DiaChi"
                 value={formData.DiaChi}
-                onChange={handleChange}
-                disabled
-            />
-
-            <Input
-                label="Số tiền"
-                name="SoTien"
-                value={formData.SoTien}
-                onChange={handleChange}
-                disabled
-            />
-
-            <Input
-                label="Số CT"
-                name="SoCT"
-                value={formData.SoCT}
-                onChange={handleChange}
                 disabled
             />
 
             <Input
                 label="Điện thoại"
-                name="DienThoai"
                 value={formData.DienThoai}
-                onChange={handleChange}
                 disabled
+            />
+
+            <Select
+                label="Hình thức thanh toán"
+                name="MaHT"
+                value={formData.MaHT}
+                onChange={handleChange}
+                options={httts}
+                valueField="MaHT"
+                labelField="TenHT"
             />
 
             <Input
-                label="Về Khoản"
+                type="date"
+                label="Ngày giao"
+                name="NgayGiao"
+                value={formData.NgayGiao}
+                onChange={handleChange}
+            />
+
+            <Input
+                label="Số tiền"
+                name="TienTra"
+                type="number"
+                value={formData.TienTra}
+                onChange={handleChange}
+            />
+
+            <Input
+                label="Số chứng từ"
+                name="SoCT"
+                value={formData.SoCT}
+                onChange={handleChange}
+            />
+
+            <Input
+                label="Ghi chú"
                 name="GhiChu"
                 value={formData.GhiChu}
                 onChange={handleChange}
-                disabled
             />
 
-
-            <Button
-                type="submit"
-                disabled={loading}
-            >
-                {
-                    loading
-                        ? 'Saving...'
-                        : selectedThuTien
-                            ? 'Update'
-                            : 'Add'
-                }
+            <Button type="submit" disabled={loading}>
+                {loading ? 'Đang lưu...' : selectedThuTien ? 'Cập nhật' : 'Lưu'}
             </Button>
 
         </form>

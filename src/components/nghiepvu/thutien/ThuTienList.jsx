@@ -1,163 +1,104 @@
 import { useEffect, useState } from 'react';
 
-import thutienService from '../../../services/thutien.service';
-import doitacService from '../../../services/doitac.service';
-import htttService from '../../../services/hinhthucthanhtoan.service';
+import socaiService   from '../../../services/socai.service';
+import doitacService  from '../../../services/doitac.service';
+import htttService    from '../../../services/hinhthucthanhtoan.service';
 
 import ThuTienModal from './ThuTienModal';
 import ThuTienTable from './ThuTienTable';
+import Button       from '../../common/Button/Button';
 
-import Button from '../../common/Button/Button';
+const LOAI_THU_TIEN = 5;
 
 const ThuTienList = () => {
 
-    const [thuTiens, setThuTiens] = useState([]);
-
-    const [khachHangs, setKhachHangs] = useState([]);
-
-    const [httts, setHttts] = useState([]);
-
+    const [thuTiens,    setThuTiens]    = useState([]);
+    const [khachHangs,  setKhachHangs]  = useState([]);
+    const [httts,       setHttts]       = useState([]);
     const [selectedThuTien, setSelectedThuTien] = useState(null);
+    const [showModal,   setShowModal]   = useState(false);
+    const [loading,     setLoading]     = useState(false);
 
-    const [showModal, setShowModal] = useState(false);
-
-    const [loading, setLoading] = useState(false);
-
-    // LOAD DATA
-    const fetchDatas = async () => {
-
+    const fetchData = async () => {
         try {
-
             setLoading(true);
-
-            const [capVeData, khachHangData, htttData] = await Promise.all([
-                thutienService.getAll(),
+            const [thuTienData, doiTacData, htttData] = await Promise.all([
+                socaiService.getByLoai(LOAI_THU_TIEN),
                 doitacService.getAll(),
-                htttService.getAll()
-
+                htttService.getAll(),
             ]);
-
-            setThuTiens(capVeData);
+            setThuTiens(thuTienData);
+            setKhachHangs(doiTacData);
             setHttts(htttData);
-            setKhachHangs(khachHangData);
-
         } catch (err) {
-
-            console.log(err);
-
+            alert(err?.response?.data?.message || 'Lỗi tải dữ liệu');
         } finally {
-
             setLoading(false);
-
         }
     };
 
-    useEffect(() => {
-        fetchDatas();
-    }, []);
+    useEffect(() => { fetchData(); }, []);
 
-
-    // ADD
     const handleAdd = () => {
-
         setSelectedThuTien(null);
-
         setShowModal(true);
     };
 
-    // EDIT
     const handleEdit = (item) => {
-
         setSelectedThuTien(item);
-
         setShowModal(true);
     };
 
-    // DELETE
     const handleDelete = async (id) => {
-
-        const confirmDelete = window.confirm(
-            'Bạn có chắc muốn xóa?'
-        );
-
-        if (!confirmDelete) return;
-
+        if (!window.confirm('Bạn có chắc muốn xóa?')) return;
         try {
-
-            await thutienService.remove(id);
-
-            await fetchDatas();
-
+            await socaiService.deletePhieu(id);
+            await fetchData();
         } catch (err) {
-
-            console.log(err);
-
+            alert(err?.response?.data?.message || 'Không thể xóa');
         }
     };
 
-    // SAVE SUCCESS
     const handleSuccess = async () => {
-
         setShowModal(false);
-
         setSelectedThuTien(null);
-
-        await fetchDatas();
+        await fetchData();
     };
 
-    // CLOSE MODAL
-    const handleCloseModal = () => {
-
+    const handleClose = () => {
         setShowModal(false);
-
         setSelectedThuTien(null);
     };
 
     return (
         <div>
 
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '20px'
-                }}
-            >
-
-                <Button onClick={handleAdd}>
-                    Add chi tiền
-                </Button>
-
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <Button onClick={handleAdd}>Thêm thu tiền</Button>
             </div>
 
-            {
-                loading ? (
-                    <p>Loading...</p>
-                ) : (
-                    <ThuTienTable
-                        thuTiens={thuTiens}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                    />
-                )
-            }
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <ThuTienTable
+                    thuTiens={thuTiens}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                />
+            )}
 
-            {
-                showModal && (
-                    <ThuTienModal
-                        khachHangs={khachHangs}
-                        httts={httts}
-                        selectedThuTien={selectedThuTien}
-                        onClose={handleCloseModal}
-                        onSuccess={handleSuccess}
-                    />
-                )
-            }
+            {showModal && (
+                <ThuTienModal
+                    khachHangs={khachHangs}
+                    httts={httts}
+                    selectedThuTien={selectedThuTien}
+                    onClose={handleClose}
+                    onSuccess={handleSuccess}
+                />
+            )}
 
         </div>
     );
 };
 
 export default ThuTienList;
-

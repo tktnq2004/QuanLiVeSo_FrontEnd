@@ -5,6 +5,6 @@ const getAll = async () => {
     return response.data;
 };
 
-export default {
-    getAll
-};
+const hinhThucThanhToanService = { getAll };
+
+export default hinhThucThanhToanService;

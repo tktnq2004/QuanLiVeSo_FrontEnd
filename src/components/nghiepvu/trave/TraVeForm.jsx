@@ -1,8 +1,8 @@
-import Input from "../../common/Input/Input";
-import Select from "../../common/Select/Select";
-import { useState } from "react";
+import { useState } from 'react';
+import Input from '../../common/Input/Input';
+import Select from '../../common/Select/Select';
 
-const TraVeForm = ({ dotPhatHanh, nhaCungCap, formData, onChange }) => {
+const TraVeForm = ({ nhaCungCap, formData, onChange }) => {
 
     const [selectedNCC, setSelectedNCC] = useState(null);
 
@@ -13,20 +13,18 @@ const TraVeForm = ({ dotPhatHanh, nhaCungCap, formData, onChange }) => {
 
     const handleNCCChange = (e) => {
         const { value } = e.target;
-
-        onChange(prev => ({ ...prev, MaNCC: value }));
-
-        const found = nhaCungCap.find((item) => item.MaDoiTac === value);
+        onChange(prev => ({ ...prev, MaDoiTac: value }));
+        const found = nhaCungCap.find(item => item.MaDoiTac === value);
         setSelectedNCC(found || null);
     };
 
     return (
-        <form className="trave-form">
+        <div className="trave-form">
 
             <Select
                 label="Nhà cung cấp"
-                name="MaNCC"
-                value={formData.MaNCC}
+                name="MaDoiTac"
+                value={formData.MaDoiTac}
                 onChange={handleNCCChange}
                 options={nhaCungCap}
                 valueField="MaDoiTac"
@@ -34,8 +32,8 @@ const TraVeForm = ({ dotPhatHanh, nhaCungCap, formData, onChange }) => {
             />
 
             <Input
-                label="Mã nhà cung cấp"
-                value={selectedNCC?.MaNCC || ''}
+                label="Mã đối tác"
+                value={selectedNCC?.MaDoiTac || ''}
                 disabled
             />
 
@@ -72,12 +70,16 @@ const TraVeForm = ({ dotPhatHanh, nhaCungCap, formData, onChange }) => {
             <Input
                 type="date"
                 label="Ngày giao"
-                name="NgayTao"
-                value={formData.NgayTao}
+                name="NgayGiao"
+                value={formData.NgayGiao}
                 onChange={handleChange}
             />
-
-        </form>
+            <Input
+                label="Số CT"
+                value={selectedNCC?.SoCT || 'MỚI'}
+                disabled
+            />
+        </div>
     );
 };
 

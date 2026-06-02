@@ -63,7 +63,6 @@ const CapVeList = () => {
         return capVes.filter((item) => {
 
             return (
-
                 item.MaCap
                     ?.toLowerCase()
                     .includes(filters.MaCap.toLowerCase())
@@ -76,12 +75,11 @@ const CapVeList = () => {
 
                 &&
 
-                item.MaCTXS
-                    ?.toLowerCase()
+                (item.MaCTXS ?? '')
+                    .toLowerCase()
                     .includes(filters.MaCTXS.toLowerCase())
             );
         });
-
     }, [capVes, filters]);
 
     // HANDLE FILTER
@@ -152,7 +150,7 @@ const CapVeList = () => {
     };
 
     return (
-        <div>
+        <>
 
             <div
                 style={{
@@ -197,7 +195,7 @@ const CapVeList = () => {
                 )
             }
 
-        </div>
+        </>
     );
 };
 

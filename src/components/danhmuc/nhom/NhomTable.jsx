@@ -3,10 +3,12 @@ import Button from '../../common/Button/Button';
 
 const NhomTable = ({ nhoms, onEdit, onDelete }) => {
 
+    // ✅
     const columns = [
-        { key: 'MA_NHOM', title: 'Mã nhóm' },
-        { key: 'TEN_NHOM', title: 'Tên nhóm' }
+        { key: 'MaNhom', title: 'Mã nhóm' },
+        { key: 'TenNhom', title: 'Tên nhóm' }
     ];
+
 
     return (
         <Table
@@ -19,7 +21,7 @@ const NhomTable = ({ nhoms, onEdit, onDelete }) => {
                     </Button>
                     <Button
                         variant="danger"
-                        onClick={() => onDelete(item.MA_NHOM)}
+                        onClick={() => onDelete(item.MaNhom)}
                     >
                         Delete
                     </Button>

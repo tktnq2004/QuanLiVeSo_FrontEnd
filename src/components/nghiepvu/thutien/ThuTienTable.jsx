@@ -1,41 +1,41 @@
+import Table  from '../../common/Table/Table';
+import Button from '../../common/Button/Button';
 
-import Table from "../../common/Table/Table";
-import Button from "../../common/Button/Button";
-
-const ThuTienTable = ({
-    thuTiens,
-    onEdit,
-    onDelete
-}) => {
+const ThuTienTable = ({ thuTiens, onEdit, onDelete }) => {
 
     const columns = [
         {
             key: 'SoCT',
-            title: 'Số CT'
+            title: 'Số CT',
         },
         {
-            key: 'NgayTao',
-            title: 'Ngày'
+            key: 'NgayGiao',
+            title: 'Ngày',
+            render: (item) => item.NgayGiao
+                ? new Date(item.NgayGiao).toLocaleDateString('vi-VN')
+                : '',
         },
         {
-            key: 'KhachHang',
+            key: 'MaDoiTac',
             title: 'Khách hàng',
+            render: (item) => item.TenDoiTac || item.MaDoiTac || '',
         },
         {
-            key: 'SoTien',
+            key: 'TienTra',
             title: 'Số tiền',
-            render: (item) => item.SoTien?.toLocaleString('vi-VN') || ''
+            render: (item) => item.TienTra
+                ? Number(item.TienTra).toLocaleString('vi-VN') + ' ₫'
+                : '',
         },
         {
-            key: 'HTTT',
-            title: 'Hình thức thanh toán',
-            render: (item) => item.HTTT || ''
+            key: 'MaHT',
+            title: 'Hình thức TT',
+            render: (item) => item.TenHT || item.MaHT || '',
         },
         {
             key: 'GhiChu',
-            title: 'Về Khoản',
-            render: (item) => item.GhiChu || ''
-        }
+            title: 'Ghi chú',
+        },
     ];
 
     return (
@@ -43,26 +43,16 @@ const ThuTienTable = ({
             columns={columns}
             data={thuTiens}
             renderActions={(item) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        gap: '8px'
-                    }}
-                >
-
-                    <Button
-                        onClick={() => onEdit(item)}
-                    >
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <Button onClick={() => onEdit(item)}>
                         Edit
                     </Button>
-
                     <Button
                         variant="danger"
-                        onClick={() => onDelete(item.MaCap)}
+                        onClick={() => onDelete(item.ID)}  // ✅ dùng ID, không phải MaCap
                     >
                         Delete
                     </Button>
-
                 </div>
             )}
         />
@@ -70,4 +60,3 @@ const ThuTienTable = ({
 };
 
 export default ThuTienTable;
-

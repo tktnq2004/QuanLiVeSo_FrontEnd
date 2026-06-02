@@ -1,150 +1,402 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-// ─── Tokens ───────────────────────────────────────────────────────────────────
-$sidebar-w: 220px;
-$bg: #f0f4f8;
-$white: #ffffff;
-$text-dark: #1e293b;
-$text-muted: #64748b;
+/* ==========================================================================
+   TOKENS
+========================================================================== */
+
+$sidebar-width: 240px;
+$sidebar-collapsed-width: 72px;
+
+$bg: #f4f7fb;
+$surface: #ffffff;
+
+$text-primary: #0f172a;
+$text-secondary: #64748b;
+
+$border: #e2e8f0;
+
 $primary: #3b82f6;
 $primary-soft: #eff6ff;
-$border: #e2e8f0;
-$active-bg: #e8f0fe;
-$active-text: #1d4ed8;
 
-* {
+$hover-bg: #f8fafc;
+
+$transition:
+  0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+$shadow:
+  0 1px 2px rgba(15, 23, 42, 0.04),
+  0 8px 24px rgba(15, 23, 42, 0.06);
+
+/* ==========================================================================
+   RESET
+========================================================================== */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html,
+body {
   margin: 0;
   padding: 0;
 }
 
-a {
-  text-decoration: none;
+body {
+  font-family: 'Inter', sans-serif;
+  background: $bg;
+  color: $text-primary;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
-// ─── Outer shell ──────────────────────────────────────────────────────────────
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+/* ==========================================================================
+   DASHBOARD
+========================================================================== */
+
 .dashboard {
   display: flex;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
   background: $bg;
-}
 
-// ─── Sidebar ──────────────────────────────────────────────────────────────────
-.sidebar {
-  width: $sidebar-w;
-  flex-shrink: 0;
-  background: $white;
-  border-right: 1px solid $border;
-  display: flex;
-  flex-direction: column;
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  &--collapsed {
+    .sidebar {
+      width: $sidebar-collapsed-width;
+    }
 
-  // Brand / logo row
-  &__brand {
-    height: 56px;
-    padding: 0 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: $text-dark;
-    border-bottom: 1px solid $border;
-    flex-shrink: 0;
+    .sidebar__brand-name,
+    .sidebar__group-label,
+    .sidebar__item-label,
+    .sidebar__group-arrow {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-6px);
+    }
 
-    svg {
-      color: $primary;
+    .sidebar__group-header {
+      justify-content: center;
+      padding-inline: 0;
+    }
+
+    .sidebar__group-header-left {
+      justify-content: center;
+    }
+
+    .sidebar__item {
+      justify-content: center;
+      padding-inline: 0;
+    }
+
+    .sidebar__brand {
+      justify-content: center;
+      padding-inline: 0;
     }
   }
 
-  // Nav list
-  &__nav {
-    padding: 0.75rem 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    overflow-y: auto;
+  &__content {
     flex: 1;
-  }
+    min-width: 0;
 
-  // Nav item
-  &__item {
+    padding: 24px;
+
+    overflow-y: auto;
+  }
+}
+
+/* ==========================================================================
+   SIDEBAR
+========================================================================== */
+
+.sidebar {
+  width: $sidebar-width;
+
+  display: flex;
+  flex-direction: column;
+
+  flex-shrink: 0;
+
+  background: $surface;
+
+  border-right: 1px solid $border;
+
+  transition:
+    width $transition,
+    background-color $transition;
+
+  /* ==========================================================
+     BRAND
+  ========================================================== */
+
+  &__brand {
+    height: 60px;
+
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    padding: 0.6rem 0.75rem;
+    justify-content: space-between;
+
+    padding: 0 16px;
+
+    border-bottom: 1px solid $border;
+
+    flex-shrink: 0;
+  }
+
+  &__brand-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-width: 0;
+  }
+
+  &__brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: $primary;
+  }
+
+  &__brand-name {
+    font-size: 15px;
+    font-weight: 700;
+
+    color: $text-primary;
+
+    white-space: nowrap;
+
+    transition:
+      opacity $transition,
+      transform $transition;
+  }
+
+  /* ==========================================================
+     TOGGLE
+  ========================================================== */
+
+  &__toggle {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
     border-radius: 8px;
-    font-size: 0.85rem;
+
+    background: transparent;
+
+    color: $text-secondary;
+
+    cursor: pointer;
+
+    transition:
+      background-color $transition,
+      color $transition,
+      transform $transition;
+
+    &:hover {
+      background: $hover-bg;
+      color: $text-primary;
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  /* ==========================================================
+     NAV
+  ========================================================== */
+
+  &__nav {
+    flex: 1;
+
+    padding: 12px;
+
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $border;
+      border-radius: 999px;
+    }
+  }
+
+  /* ==========================================================
+     GROUP
+  ========================================================== */
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__group-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 8px 10px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    color: $text-secondary;
+
+    transition:
+      background-color $transition,
+      color $transition;
+  }
+
+  &__group-header:hover {
+    background: $hover-bg;
+    color: $text-primary;
+  }
+
+  &__group-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-width: 0;
+  }
+
+  &__group-label {
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+
+    white-space: nowrap;
+
+    transition:
+      opacity $transition,
+      transform $transition;
+  }
+
+  &__group-arrow {
+    display: flex;
+    align-items: center;
+
+    transition:
+      opacity $transition,
+      transform $transition;
+  }
+
+  &__group-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* ==========================================================
+     ITEM
+  ========================================================== */
+
+  &__item {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-height: 42px;
+
+    padding: 0 12px;
+
+    border-radius: 10px;
+
+    color: $text-secondary;
+
+    font-size: 14px;
     font-weight: 500;
-    color: $text-muted;
-    transition: background 0.15s ease, color 0.15s ease;
+
+    white-space: nowrap;
+
+    transition:
+      background-color $transition,
+      color $transition,
+      transform $transition;
 
     svg {
       flex-shrink: 0;
     }
 
     &:hover {
-      background: $bg;
-      color: $text-dark;
+      background: $hover-bg;
+      color: $text-primary;
+    }
+
+    &:active {
+      transform: scale(0.985);
     }
 
     &--active {
-      background: $active-bg;
-      color: $active-text;
+      background: $primary-soft;
+      color: $primary;
+
+      font-weight: 600;
+
+      &::before {
+        content: '';
+
+        position: absolute;
+
+        left: 0;
+        top: 8px;
+        bottom: 8px;
+
+        width: 3px;
+
+        border-radius: 999px;
+
+        background: $primary;
+      }
 
       svg {
         color: $primary;
       }
     }
   }
-}
 
-// ─── Content area ─────────────────────────────────────────────────────────────
-.dashboard__content {
-  flex: 1;
-  min-width: 0;
-  padding: 2rem;
-  overflow-y: auto;
-}
+  &__item-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-.sidebar__group {
-  margin-bottom: 4px;
-}
-
-.sidebar__group-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 8px 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: 6px;
-  color: inherit;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+    transition:
+      opacity $transition,
+      transform $transition;
   }
-}
-
-.sidebar__group-header-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  opacity: 0.6;
-}
-
-.sidebar__group-items {
-  display: flex;
-  flex-direction: column;
-  padding-left: 12px;
-  margin-top: 2px;
 }

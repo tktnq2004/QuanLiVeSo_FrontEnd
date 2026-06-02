@@ -1,16 +1,10 @@
-import Modal from '../../common/Modal/Modal';
+import Modal      from '../../common/Modal/Modal';
 import ThuTienForm from './ThuTienForm';
 
-const ThuTienModal = ({
-    khachHangs,
-    httts,
-    selectedThuTien,
-    onClose,
-    onSuccess
-}) => {
+const ThuTienModal = ({ khachHangs, httts, selectedThuTien, onClose, onSuccess }) => {
     return (
         <Modal
-            title={selectedThuTien ? 'Edit Cặp Vé' : 'Add Cặp Vé'}
+            title={selectedThuTien ? 'Chỉnh sửa thu tiền' : 'Thêm thu tiền'}
             onClose={onClose}
         >
             <ThuTienForm
@@ -21,6 +15,6 @@ const ThuTienModal = ({
             />
         </Modal>
     );
+};
 
-}
 export default ThuTienModal;

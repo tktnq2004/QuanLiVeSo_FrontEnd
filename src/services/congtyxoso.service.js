@@ -8,24 +8,29 @@ const getAll = async () => {
 const getById = async (id) => {
     const response = await api.get(`/congtyxoso/${id}`);
     return response.data;
-}
+};
 
 const create = async (data) => {
-    return await api.post('/congtyxoso', data);
+    const response = await api.post('/congtyxoso', data);
+    return response.data;
 };
 
 const update = async (id, data) => {
-    return await api.put(`/congtyxoso/${id}`, data);
+    const response = await api.put(`/congtyxoso/${id}`, data);
+    return response.data;
 };
 
 const remove = async (id) => {
-    return await api.delete(`/congtyxoso/${id}`);
+    const response = await api.delete(`/congtyxoso/${id}`);
+    return response.data;
 };
 
-export default {
+const congTyXoSoService = {
     getAll,
     getById,
     create,
     update,
-    remove
+    remove,
 };
+
+export default congTyXoSoService;

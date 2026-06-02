@@ -4,12 +4,12 @@ const NhomSearch = ({ filters, onFilterChange }) => {
 
     const columns = [
         {
-            key: 'MA_NHOM',
+            key: 'MaNhom',
             title: 'Mã nhóm',
             searchable: true
         },
         {
-            key: 'TEN_NHOM',
+            key: 'TenNhom',
             title: 'Tên nhóm',
             searchable: true
         }

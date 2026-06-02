@@ -1,30 +1,30 @@
 import api from '../api/axios';
 
 const getAll = async () => {
-    return await api.get('/phieu');
-    
+    const response = await api.get('/phieu');
+    return response.data;
 };
 
 const getById = async (id) => {
-    return await api.get(`/phieu/${id}`);
-}
+    const response = await api.get(`/phieu/${id}`);
+    return response.data;
+};
 
 const create = async (data) => {
-
-    return await api.post(
-        '/phieu',
-        data
-    );
+    const response = await api.post('/phieu', data);
+    return response.data;
 };
 
 const remove = async (id) => {
-    return await api.put(
-        `/phieu/${id}/remove`
-    );
+    const response = await api.put(`/phieu/${id}/remove`);
+    return response.data;
 };
 
-export default {
+const phieuService = {
     getAll,
     create,
-    remove
+    remove,
+    getById,
 };
+
+export default phieuService;

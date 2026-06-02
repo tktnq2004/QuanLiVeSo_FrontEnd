@@ -1,57 +1,64 @@
-// NhapVeTable.jsx
 import Input from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
 const columns = [
-    { label: 'Mã kỳ sổ',  field: 'MaKySo',   type: 'select' },
-    { label: 'Số cặp',     field: 'SoCap' },
-    { label: 'Mệnh giá',   field: 'MenhGia' },
-    { label: 'Giá trị',    field: 'GiaTri',   disabled: true },  // auto
-    { label: 'Vé ế',       field: 'VeE' },
-    { label: 'Thực nhận',  field: 'ThucNhan', disabled: true },  // auto
-    { label: 'Đơn giá',    field: 'DonGia' },
-    { label: 'TT nhập',    field: 'TTNhap',   disabled: true },  // auto
-    { label: 'Ghi chú',    field: 'GhiChu' }
+    { label: 'Đợt phát hành', field: 'MaDot', type: 'select' },
+    { label: 'Số cặp', field: 'SoCap' },
+    { label: 'Mệnh giá', field: 'MenhGia' },
+    { label: 'Giá trị', field: 'GiaTri', disabled: true },
+    { label: 'Vé ế', field: 'VeE' },
+    { label: 'Thực nhận', field: 'ThucNhan', disabled: true },
+    { label: 'Đơn giá', field: 'DonGia' },
+    { label: 'TT nhập', field: 'TTNhap', disabled: true },
+    { label: 'Ghi chú', field: 'GhiChu' },
 ];
 
-// tính toán các field tự động
 const calcRow = (row) => {
 
-    const soCap   = parseFloat(row.SoCap)   || 0;
-    const menhGia = parseFloat(row.MenhGia) || 0;
-    const veE     = parseFloat(row.VeE)     || 0;
-    const donGia  = parseFloat(row.DonGia)  || 0;
+    const soCap = parseInt(row.SoCap) || 0;
+    const menhGia = parseInt(row.MenhGia) || 0;
+    const veE = parseInt(row.VeE) || 0;
+    const donGia = parseInt(row.DonGia) || 0;
 
-    const giaTri   = soCap * menhGia;
+
+
+
+    // GiaTri = tổng giá trị thực nhận theo mệnh giá
+    const giaTri = soCap * menhGia;
+
+    // ThucNhan = số cặp thực nhận (sau khi trừ vé ế)
     const thucNhan = giaTri - veE;
-    const ttNhap   = soCap * donGia * 1000;
+
+    // TTNhap = tiền phải trả nhà cung cấp
+    const ttNhap = Math.round(thucNhan * donGia / 100);
 
     return {
         ...row,
-        GiaTri:   giaTri   || '',
-        ThucNhan: thucNhan || '',
-        TTNhap:   ttNhap   || ''
+        ThucNhan: thucNhan >= 0 ? thucNhan : 0,
+        GiaTri: giaTri >= 0 ? giaTri : 0,
+        TTNhap: ttNhap >= 0 ? ttNhap : 0,
     };
 };
 
 const NhapVeTable = ({
-    kyXoOptions = [],
+    dotPhatHanh = [],
     rows,
     selectedRowId,
     onRowsChange,
     onSelectRow,
-    emptyRow
+    emptyRow,
 }) => {
 
     const handleChange = (rowId, field, value) => {
 
         const updated = rows.map(row =>
             row.id === rowId
-                ? calcRow({ ...row, [field]: value })  // tính lại sau mỗi thay đổi
+                ? calcRow({ ...row, [field]: value })
                 : row
         );
 
-        if (field === 'MaKySo' && value) {
+        // Tự thêm dòng mới khi chọn MaDot ở dòng cuối
+        if (field === 'MaDot' && value) {
             const isLastRow = rows[rows.length - 1].id === rowId;
             if (isLastRow) {
                 onRowsChange([...updated, emptyRow()]);
@@ -71,16 +78,16 @@ const NhapVeTable = ({
                     onChange={(e) =>
                         handleChange(row.id, col.field, e.target.value)
                     }
-                    options={kyXoOptions}
-                    valueField="MaKyXo"
-                    labelField="MaKyXo"
+                    options={dotPhatHanh}
+                    valueField="MaDot"
+                    labelField="DienGiai"
                 />
             );
         }
 
         return (
             <Input
-                value={row[col.field]}
+                value={row[col.field] ?? ''}
                 disabled={col.disabled}
                 onChange={(e) =>
                     handleChange(row.id, col.field, e.target.value)

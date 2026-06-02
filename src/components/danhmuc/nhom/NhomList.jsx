@@ -15,8 +15,8 @@ const NhomList = () => {
     const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({
-        MA_NHOM: '',
-        TEN_NHOM: ''
+        MaNhom: '',
+        TenNhom: ''
     });
 
     const fetchNhoms = async () => {
@@ -37,16 +37,16 @@ const NhomList = () => {
 
     const filteredNhoms = useMemo(() => {
         return nhoms.filter((item) =>
-            item.MA_NHOM
-                ?.toLowerCase()
-                .includes(filters.MA_NHOM.toLowerCase())
+            (item.MaNhom ?? '')
+                .toLowerCase()
+                .includes(filters.MaNhom.toLowerCase())
             &&
-            item.TEN_NHOM
-                ?.toLowerCase()
-                .includes(filters.TEN_NHOM.toLowerCase())
+            (item.TenNhom ?? '')
+                .toLowerCase()
+                .includes(filters.TenNhom.toLowerCase())
         );
     }, [nhoms, filters]);
-
+    
     const handleFilterChange = (event) => {
         const { name, value } = event.target;
         setFilters(prev => ({ ...prev, [name]: value }));

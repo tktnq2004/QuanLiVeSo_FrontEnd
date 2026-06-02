@@ -11,21 +11,26 @@ const getById = async (id) => {
 };
 
 const create = async (data) => {
-    return await api.post('/nhom', data);
+    const response = await api.post('/nhom', data);
+    return response.data;
 };
 
 const update = async (id, data) => {
-    return await api.put(`/nhom/${id}`, data);
+    const response = await api.put(`/nhom/${id}`, data);
+    return response.data;
 };
 
 const remove = async (id) => {
-    return await api.delete(`/nhom/${id}`);
+    const response = await api.delete(`/nhom/${id}`);
+    return response.data;
 };
 
-export default {
+const nhomService = {
     getAll,
     getById,
     create,
     update,
-    remove
+    remove,
 };
+
+export default nhomService;
