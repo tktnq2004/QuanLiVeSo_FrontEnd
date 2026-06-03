@@ -1,207 +1,170 @@
 import { useEffect, useState } from 'react';
 
-import chitienService from '../../../services/chitien.service';
+import socaiService from '../../../services/socai.service';
 
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
 import Select from '../../common/Select/Select';
 
+const LOAI_CHI_TIEN = 6;
+
 const initialState = {
-    KhachHang: '',
-    MaKH: '',
-    NgayTao: new Date().toISOString().split('T')[0],
-    SoTien: '',
-    HTTT: '',
-    DiaChi: '',
-    SoCT: '',
+    MaDoiTac:  '',
+    NgayGiao:  new Date().toISOString().split('T')[0],
+    TienTra:   '',
+    MaHT:      '',
+    SoCT:      '',
+    GhiChu:    '',
+    DiaChi:    '',
     DienThoai: '',
-    GhiChu: ''
 };
 
-const ChiTienForm = ({
-    khachHangs,
-    httts,
-    selectedChiTien,
-    onSuccess
-}) => {
+const ChiTienForm = ({ doiTacs, httts, selectedChiTien, onSuccess }) => {
 
     const [formData, setFormData] = useState(initialState);
+    const [loading,  setLoading]  = useState(false);
 
-    const [loading, setLoading] = useState(false);
-
-    // EDIT MODE
     useEffect(() => {
-
         if (selectedChiTien) {
-
             setFormData({
-                ...selectedChiTien,
-
+                MaDoiTac:  selectedChiTien.MaDoiTac  || '',
+                NgayGiao:  selectedChiTien.NgayGiao?.split('T')[0] || '',
+                TienTra:   selectedChiTien.TienTra    || '',
+                MaHT:      selectedChiTien.MaHT       || '',
+                SoCT:      selectedChiTien.SoCT       || '',
+                GhiChu:    selectedChiTien.GhiChu     || '',
+                DiaChi:    selectedChiTien.DiaChi     || '',
+                DienThoai: selectedChiTien.DienThoai  || '',
             });
-
         } else {
-
             setFormData(initialState);
-
         }
-
     }, [selectedChiTien]);
 
-    // INPUT
-    const handleChange = (event) => {
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
-        const { name, value } = event.target;
-
+    const handleDoiTacChange = (e) => {
+        const { value } = e.target;
+        const found = doiTacs.find(dt => dt.MaDoiTac === value);
         setFormData(prev => ({
             ...prev,
-            [name]: value
+            MaDoiTac:  value,
+            DiaChi:    found?.DiaChi    || '',
+            DienThoai: found?.DienThoai || '',
         }));
     };
 
-    // SUBMIT
-    const handleSubmit = async (event) => {
+    const handleSubmit = async () => {
 
-        event.preventDefault();
+        if (!formData.MaDoiTac) {
+            alert('Vui lòng chọn đối tác');
+            return;
+        }
+        if (!formData.TienTra || Number(formData.TienTra) <= 0) {
+            alert('Vui lòng nhập số tiền hợp lệ');
+            return;
+        }
+        if (!formData.NgayGiao) {
+            alert('Vui lòng chọn ngày');
+            return;
+        }
 
         try {
-
-            if (!formData.MaCap.trim()) {
-                alert('Mã cặp vé không được để trống');
-                return;
-            }
-
-            if (!formData.TenCap.trim()) {
-                alert('Tên cặp vé không được để trống');
-                return;
-            }
-
             setLoading(true);
 
-            if (selectedChiTien) {
-
-                await chitienService.update(
-                    formData.MaCap,
-                    formData
-                );
-
-            } else {
-
-                await chitienService.create(formData);
-
-            }
+            await socaiService.createPhieu({
+                NgayGiao: formData.NgayGiao,
+                MaDoiTac: formData.MaDoiTac,
+                Loai:     LOAI_CHI_TIEN,
+                TienTra:  Number(formData.TienTra),
+                MaHT:     formData.MaHT   || null,
+                SoCT:     formData.SoCT   || null,
+                GhiChu:   formData.GhiChu || null,
+            });
 
             setFormData(initialState);
-
-            if (onSuccess) {
-                onSuccess();
-            }
+            if (onSuccess) onSuccess();
 
         } catch (err) {
-
-            alert(
-                err?.response?.data?.message ||
-                'Có lỗi xảy ra'
-            );
-
+            alert(err?.response?.data?.message || 'Có lỗi xảy ra');
         } finally {
-
             setLoading(false);
-
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
 
             <Select
-                name="KhachHang"
-                value={formData.KhachHang}
-                onChange={handleChange}
-                options={khachHangs}
-                valueField="MaKH"
-                labelField="TenKH"
-            />
-
-            <Input
-                type="text"
+                label="Đối tác"
                 name="MaDoiTac"
-                placeholder="Mã KH"
-                value={formData.MaKH}
-                onChange={handleChange}
-                disabled={!!selectedChiTien}
-            />
-
-            <Select
-                name="HTTT"
-                value={formData.HTTT}
-                onChange={handleChange}
-                options={httts}
-                valueField="MaHTTT"
-                labelField="TenHTTT"
-            />
-
-            <Input
-                type="date"
-                label="Ngày giao"
-                name="NgayTao"
-                value={formData.NgayTao}
-                onChange={handleChange}
+                value={formData.MaDoiTac}
+                onChange={handleDoiTacChange}
+                options={doiTacs}
+                valueField="MaDoiTac"
+                labelField="TenDoiTac"
             />
 
             <Input
                 label="Địa chỉ"
-                name="DiaChi"
                 value={formData.DiaChi}
-                onChange={handleChange}
-                disabled
-            />
-
-            <Input
-                label="Số tiền"
-                name="SoTien"
-                value={formData.SoTien}
-                onChange={handleChange}
-            />
-
-            <Input
-                label="Số CT"
-                name="SoCT"
-                value={formData.SoCT}
-                onChange={handleChange}
                 disabled
             />
 
             <Input
                 label="Điện thoại"
-                name="DienThoai"
                 value={formData.DienThoai}
-                onChange={handleChange}
                 disabled
+            />
+
+            <Select
+                label="Hình thức thanh toán"
+                name="MaHT"
+                value={formData.MaHT}
+                onChange={handleChange}
+                options={httts}
+                valueField="MaHT"
+                labelField="TenHT"
             />
 
             <Input
-                label="Về Khoản"
+                type="date"
+                label="Ngày"
+                name="NgayGiao"
+                value={formData.NgayGiao}
+                onChange={handleChange}
+            />
+
+            <Input
+                label="Số tiền"
+                name="TienTra"
+                type="number"
+                value={formData.TienTra}
+                onChange={handleChange}
+            />
+
+            <Input
+                label="Số chứng từ"
+                name="SoCT"
+                value={formData.SoCT}
+                onChange={handleChange}
+            />
+
+            <Input
+                label="Ghi chú"
                 name="GhiChu"
                 value={formData.GhiChu}
                 onChange={handleChange}
-                disabled
             />
 
-
-            <Button
-                type="submit"
-                disabled={loading}
-            >
-                {
-                    loading
-                        ? 'Saving...'
-                        : selectedChiTien
-                            ? 'Update'
-                            : 'Add'
-                }
+            <Button onClick={handleSubmit} disabled={loading}>
+                {loading ? 'Đang lưu...' : 'Lưu'}
             </Button>
 
-        </form>
+        </div>
     );
 };
 

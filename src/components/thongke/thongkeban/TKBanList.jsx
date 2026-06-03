@@ -1,45 +1,41 @@
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 
-import socaiService from '../../../services/socai.service';
-import doitacService from '../../../services/doitac.service';
+import socaiService       from '../../../services/socai.service';
+import doitacService      from '../../../services/doitac.service';
 import dotphathanhService from '../../../services/dotphathanh.service';
 
-import TKBanTable from './TKBanTable';
+import TKBanTable  from './TKBanTable';
 import TKBanSearch from './TKBanSearch';
-import Loading from '../../common/Loading/Loading';
+import Loading     from '../../common/Loading/Loading';
 
 import '../../../styles/thongkeSearch.scss';
-
-import { toast } from 'react-toastify';
 
 const TKBanList = () => {
 
     const [records, setRecords] = useState([]);
     const [doiTacs, setDoiTacs] = useState([]);
-    const [kyXos, setKyXos] = useState([]);
+    const [kyXos,   setKyXos]   = useState([]);
     const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({
-        TuNgay: new Date().toISOString().split('T')[0],
-        DenNgay: new Date().toISOString().split('T')[0],
+        TuNgay:   '',
+        DenNgay:  '',
         MaDoiTac: '',
-        MaKySo: ''
+        MaKyXo:   '',
     });
 
     const fetchData = async () => {
         try {
             setLoading(true);
-
-            const [data, doiTacData, kyXoData] = await Promise.all([
-                socaiService.getAll(),
+            const [data, doiTacData, dotData] = await Promise.all([
+                socaiService.getThongKe(2),     // Loai 2 = Bán vé
                 doitacService.getAll(),
-                dotphathanhService.getAll()
+                dotphathanhService.getAll(),
             ]);
-
             setRecords(data);
             setDoiTacs(doiTacData);
-            setKyXos(kyXoData);
-
+            setKyXos(dotData);
         } catch (err) {
             toast.error('Không thể tải dữ liệu');
         } finally {
@@ -47,9 +43,7 @@ const TKBanList = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useEffect(() => { fetchData(); }, []);
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -57,42 +51,36 @@ const TKBanList = () => {
     };
 
     const filteredRecords = useMemo(() => {
+
         return records.filter(item => {
 
-            const ngay = new Date(item.NgayGiao);
+            const ngay = item.NgayGiao?.split('T')[0];
 
-            const tuNgay = filters.TuNgay ? new Date(filters.TuNgay) : null;
-            const denNgay = filters.DenNgay ? new Date(filters.DenNgay) : null;
-
-            if (tuNgay && ngay < tuNgay) return false;
-            if (denNgay && ngay > denNgay) return false;
-
-            if (filters.MaDoiTac &&
-                item.MaDoiTac !== filters.MaDoiTac) return false;
-
-            if (filters.MaKySo &&
-                item.MaKySo !== filters.MaKySo) return false;
+            if (filters.TuNgay   && ngay < filters.TuNgay)
+                return false;
+            if (filters.DenNgay  && ngay > filters.DenNgay)
+                return false;
+            if (filters.MaDoiTac && item.MaDoiTac !== filters.MaDoiTac)
+                return false;
+            if (filters.MaKyXo   && item.MaKyXo !== filters.MaKyXo)
+                return false;
 
             return true;
         });
+
     }, [records, filters]);
 
     if (loading) return <Loading />;
 
     return (
         <div>
-
             <TKBanSearch
                 filters={filters}
                 onFilterChange={handleFilterChange}
                 doiTacs={doiTacs}
                 kyXos={kyXos}
             />
-
-            <TKBanTable
-                records={filteredRecords}
-            />
-
+            <TKBanTable records={filteredRecords} />
         </div>
     );
 };

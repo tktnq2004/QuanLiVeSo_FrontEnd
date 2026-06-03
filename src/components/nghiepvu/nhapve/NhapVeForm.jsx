@@ -77,9 +77,11 @@ const NhapVeForm = ({ nhaCungCap, formData, onChange }) => {
 
             <Input
                 label="Số CT"
-                value={selectedNCC?.SoCT || 'MỚI'}
-                disabled
+                name="SoCT"
+                value={formData.SoCT || ''}
+                onChange={handleChange}
             />
+
         </div>
     );
 };

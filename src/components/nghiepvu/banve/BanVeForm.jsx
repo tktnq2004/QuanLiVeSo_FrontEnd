@@ -74,10 +74,12 @@ const BanVeForm = ({ khachHang, formData, onChange }) => {
                 value={formData.NgayGiao}
                 onChange={handleChange}
             />
+
             <Input
                 label="Số CT"
-                value={selectedKH?.SoCT || 'MỚI'}
-                disabled
+                name="SoCT"
+                value={formData.SoCT || ''}
+                onChange={handleChange}
             />
 
         </div>

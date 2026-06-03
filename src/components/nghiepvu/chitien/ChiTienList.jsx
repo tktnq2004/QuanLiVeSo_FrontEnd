@@ -1,165 +1,104 @@
 import { useEffect, useState } from 'react';
 
-import chitienService from '../../../services/chitien.service';
+import socaiService  from '../../../services/socai.service';
 import doitacService from '../../../services/doitac.service';
-import htttService from '../../../services/hinhthucthanhtoan.service';
+import htttService   from '../../../services/hinhthucthanhtoan.service';
 
 import ChiTienModal from './ChiTienModal';
 import ChiTienTable from './ChiTienTable';
+import Button       from '../../common/Button/Button';
 
-import Button from '../../common/Button/Button';
+const LOAI_CHI_TIEN = 6;
 
 const ChiTienList = () => {
 
-    const [chiTiens, setChiTiens] = useState([]);
-
-    const [khachHangs, setKhachHangs] = useState([]);
-
-    const [httts, setHttts] = useState([]);
-
+    const [chiTiens,       setChiTiens]       = useState([]);
+    const [doiTacs,        setDoiTacs]        = useState([]);
+    const [httts,          setHttts]          = useState([]);
     const [selectedChiTien, setSelectedChiTien] = useState(null);
+    const [showModal,      setShowModal]      = useState(false);
+    const [loading,        setLoading]        = useState(false);
 
-    const [showModal, setShowModal] = useState(false);
-
-    const [loading, setLoading] = useState(false);
-
-    // LOAD DATA
-    const fetchDatas = async () => {
-
+    const fetchData = async () => {
         try {
-
             setLoading(true);
-
-            const [chiTienData, khachHangData, htttData] = await Promise.all([
-                chitienService.getAll(),
+            const [chiTienData, doiTacData, htttData] = await Promise.all([
+                socaiService.getByLoai(LOAI_CHI_TIEN),
                 doitacService.getAll(),
-                htttService.getAll()
-
+                htttService.getAll(),
             ]);
-
             setChiTiens(chiTienData);
+            setDoiTacs(doiTacData);
             setHttts(htttData);
-            setKhachHangs(khachHangData);
-
         } catch (err) {
-
-            console.log(err);
-
+            alert(err?.response?.data?.message || 'Lỗi tải dữ liệu');
         } finally {
-
             setLoading(false);
-
         }
     };
 
-    useEffect(() => {
-        fetchDatas();
-    }, []);
+    useEffect(() => { fetchData(); }, []);
 
-    
-    // ADD
     const handleAdd = () => {
-
         setSelectedChiTien(null);
-
         setShowModal(true);
     };
 
-    // EDIT
     const handleEdit = (item) => {
-
         setSelectedChiTien(item);
-
         setShowModal(true);
     };
 
-    // DELETE
     const handleDelete = async (id) => {
-
-        const confirmDelete = window.confirm(
-            'Bạn có chắc muốn xóa?'
-        );
-
-        if (!confirmDelete) return;
-
+        if (!window.confirm('Bạn có chắc muốn xóa?')) return;
         try {
-
-            await chitienService.remove(id);
-
-            await fetchDatas();
-
+            await socaiService.deletePhieu(id);
+            await fetchData();
         } catch (err) {
-
-            console.log(err);
-
+            alert(err?.response?.data?.message || 'Không thể xóa');
         }
     };
 
-    // SAVE SUCCESS
     const handleSuccess = async () => {
-
         setShowModal(false);
-
         setSelectedChiTien(null);
-
-        await fetchDatas();
+        await fetchData();
     };
 
-    // CLOSE MODAL
-    const handleCloseModal = () => {
-
+    const handleClose = () => {
         setShowModal(false);
-
         setSelectedChiTien(null);
     };
 
     return (
         <div>
 
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '20px'
-                }}
-            >
-
-                <Button onClick={handleAdd}>
-                    Add chi tiền
-                </Button>
-
+            <div style={{ marginBottom: '20px' }}>
+                <Button onClick={handleAdd}>Thêm chi tiền</Button>
             </div>
 
-            
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <ChiTienTable
+                    chiTiens={chiTiens}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                />
+            )}
 
-            {
-                loading ? (
-                    <p>Loading...</p>
-                ) : (
-                    <ChiTienTable
-                        chiTiens={chiTiens}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                    />
-                )
-            }
-
-            {
-                showModal && (
-                    <ChiTienModal
-                        khachHangs={khachHangs}
-                        httts={httts}
-                        selectedChiTien={selectedChiTien}
-                        onClose={handleCloseModal}
-                        onSuccess={handleSuccess}
-                    />
-                )
-            }
+            {showModal && (
+                <ChiTienModal
+                    doiTacs={doiTacs}
+                    httts={httts}
+                    selectedChiTien={selectedChiTien}
+                    onClose={handleClose}
+                    onSuccess={handleSuccess}
+                />
+            )}
 
         </div>
     );
 };
 
 export default ChiTienList;
-

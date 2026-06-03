@@ -1,39 +1,38 @@
 import Table  from '../../common/Table/Table';
 import Button from '../../common/Button/Button';
 
+import formatDate     from '../../../untils/formatDate';
+import formatCurrency from '../../../untils/formatCurrency';
+
 const ThuTienTable = ({ thuTiens, onEdit, onDelete }) => {
 
     const columns = [
         {
-            key: 'SoCT',
+            key:   'SoCT',
             title: 'Số CT',
         },
         {
-            key: 'NgayGiao',
-            title: 'Ngày',
-            render: (item) => item.NgayGiao
-                ? new Date(item.NgayGiao).toLocaleDateString('vi-VN')
-                : '',
+            key:    'NgayGiao',
+            title:  'Ngày',
+            render: (item) => formatDate(item.NgayGiao),
         },
         {
-            key: 'MaDoiTac',
-            title: 'Khách hàng',
+            key:    'MaDoiTac',
+            title:  'Khách hàng',
             render: (item) => item.TenDoiTac || item.MaDoiTac || '',
         },
         {
-            key: 'TienTra',
-            title: 'Số tiền',
-            render: (item) => item.TienTra
-                ? Number(item.TienTra).toLocaleString('vi-VN') + ' ₫'
-                : '',
+            key:    'ThanhTien',
+            title:  'Số tiền',
+            render: (item) => formatCurrency(item.ThanhTien),
         },
         {
-            key: 'MaHT',
-            title: 'Hình thức TT',
+            key:    'MaHT',
+            title:  'Hình thức TT',
             render: (item) => item.TenHT || item.MaHT || '',
         },
         {
-            key: 'GhiChu',
+            key:   'GhiChu',
             title: 'Ghi chú',
         },
     ];
@@ -49,7 +48,7 @@ const ThuTienTable = ({ thuTiens, onEdit, onDelete }) => {
                     </Button>
                     <Button
                         variant="danger"
-                        onClick={() => onDelete(item.ID)}  // ✅ dùng ID, không phải MaCap
+                        onClick={() => onDelete(item.IDPhieu)}
                     >
                         Delete
                     </Button>

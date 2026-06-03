@@ -1,43 +1,40 @@
+import Table  from '../../common/Table/Table';
+import Button from '../../common/Button/Button';
 
-import Table from "../../common/Table/Table";
-import Button from "../../common/Button/Button";
+import formatDate     from '../../../untils/formatDate';
+import formatCurrency from '../../../untils/formatCurrency';
 
-const ChiTienTable = ({
-    chiTiens,
-    onEdit,
-    onDelete
-}) => {
-
-
+const ChiTienTable = ({ chiTiens, onEdit, onDelete }) => {
 
     const columns = [
         {
-            key: 'SoCT',
-            title: 'Số CT'
+            key:   'SoCT',
+            title: 'Số CT',
         },
         {
-            key: 'NgayTao',
-            title: 'Ngày'
+            key:    'NgayGiao',
+            title:  'Ngày',
+            render: (item) => formatDate(item.NgayGiao),
         },
         {
-            key: 'KhachHang',
-            title: 'Khách hàng',
+            key:    'MaDoiTac',
+            title:  'Đối tác',
+            render: (item) => item.TenDoiTac || item.MaDoiTac || '',
         },
         {
-            key: 'SoTien',
-            title: 'Số tiền',
-            render: (item) => item.SoTien?.toLocaleString('vi-VN') || ''
+            key:    'ThanhTien',
+            title:  'Số tiền',
+            render: (item) => formatCurrency(item.ThanhTien),
         },
         {
-            key: 'HTTT',
-            title: 'Hình thức thanh toán',
-            render: (item) => item.HTTT || ''
+            key:    'MaHT',
+            title:  'Hình thức TT',
+            render: (item) => item.TenHT || item.MaHT || '',
         },
         {
-            key: 'GhiChu',
-            title: 'Về Khoản',
-            render: (item) => item.GhiChu || ''
-        }
+            key:   'GhiChu',
+            title: 'Ghi chú',
+        },
     ];
 
     return (
@@ -45,26 +42,16 @@ const ChiTienTable = ({
             columns={columns}
             data={chiTiens}
             renderActions={(item) => (
-                <div
-                    style={{
-                        display: 'flex',
-                        gap: '8px'
-                    }}
-                >
-
-                    <Button
-                        onClick={() => onEdit(item)}
-                    >
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <Button onClick={() => onEdit(item)}>
                         Edit
                     </Button>
-
                     <Button
                         variant="danger"
-                        onClick={() => onDelete(item.MaChiTien)}
+                        onClick={() => onDelete(item.IDPhieu)}
                     >
                         Delete
                     </Button>
-
                 </div>
             )}
         />
@@ -72,4 +59,3 @@ const ChiTienTable = ({
 };
 
 export default ChiTienTable;
-

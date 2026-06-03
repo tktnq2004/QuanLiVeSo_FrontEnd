@@ -2,23 +2,23 @@ import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
 const columns = [
-    { label: 'Đợt phát hành', field: 'MaDot',  type: 'select' },
+    { label: 'Đợt phát hành', field: 'MaDot',   type: 'select' },
     { label: 'Vé thu về',     field: 'VeE' },
-    { label: 'Đơn giá',       field: 'DonGia' },
-    { label: 'TT thu',        field: 'TTThu',  disabled: true },
+    { label: 'Tỷ lệ TT (%)',  field: 'TyLe' },
+    { label: 'TT thu',        field: 'TTThu',   disabled: true },
     { label: 'Ghi chú',       field: 'GhiChu' },
 ];
 
 const calcRow = (row) => {
 
-    const veE    = parseFloat(row.VeE)    || 0;
-    const donGia = parseFloat(row.DonGia) || 0;
+    const veE     = parseInt(row.VeE)     || 0;
+    const tyLe    = parseFloat(row.TyLe)  || 0;
 
-    const ttThu = veE * donGia;
+    const ttThu = Math.round(veE * tyLe / 100);
 
     return {
         ...row,
-        TTThu: ttThu || '',
+        TTThu:  ttThu  >= 0 ? ttThu  : 0,
     };
 };
 

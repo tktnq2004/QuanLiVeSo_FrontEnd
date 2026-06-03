@@ -1,75 +1,80 @@
 import Table from '../../common/Table/Table';
-
 import formatCurrency from '../../../untils/formatCurrency';
+import formatDate from '../../../untils/formatDate';
 
-const TKNhapTable = ({
-    records,
-    handleDelete
-}) => {
+const TKNhapTable = ({ records }) => {
 
     const columns = [
-
         {
-            key: 'MaKySo',
-            title: 'Mã kỳ số'
+            key: 'MaKyXo',
+            title: 'Mã kỳ xổ',
         },
-
         {
             key: 'SoCT',
-            title: 'Số CT'
+            title: 'Số CT',
         },
-
         {
             key: 'NgayGiao',
-            title: 'Ngày giao'
+            title: 'Ngày giao',
+            render: (row) => formatDate(row.NgayGiao),
         },
-
         {
-            key: 'ChuThich',
-            title: 'Diễn giải'
+            key: 'DienGiai',
+            title: 'Diễn giải',
         },
-
         {
             key: 'MaDoiTac',
-            title: 'Mã NCC'
+            title: 'Mã NCC',
         },
         {
             key: 'TenDoiTac',
-            title: 'Tên NCC'
+            title: 'Nhà CC',
         },
         {
             key: 'SoCap',
-            title: 'Số cặp'
+            title: 'Số cặp',
         },
-
         {
-            key: 'MenhGiaCap',
-            title: 'Mệnh giá cặp'
+            key: 'DonGia',
+            title: 'Mệnh giá',
+            render: (row) => formatCurrency(row.DonGia),
         },
-
         {
             key: 'GiaTri',
-            title: 'Giá trị'
+            title: 'Giá trị',
+            render: (row) => formatCurrency(row.GiaTri),
         },
-
         {
             key: 'VeE',
-            title: 'Vé ế'
+            title: 'Vé ế',
+            render: (row) => row.VeE ?? 0,
         },
-
         {
-            key: 'ThucNhap',
-            title: 'Thực nhập'
-        }
+            key: 'ThucTinh',
+            title: 'Thực nhập',
+            render: (row) => formatCurrency(row.GiaTri - row.VeE),
+        },
+        {
+            key: 'TyLeThanhToan',
+            title: 'Tỷ lệ TT (%)',
+            render: (row) => `${row.TyLeThanhToan * 100 ?? 0}`,
+        },
+        {
+            key: 'ThanhTien',
+            title: 'TT nhập',
+            render: (row) => formatCurrency(row.ThanhTien),
+        },
+        {
+            key: 'GhiChu',
+            title: 'Ghi chú',
+            render: (row) => row.GhiChu || '',
+        },
     ];
 
-
     return (
-
         <Table
             columns={columns}
             data={records}
-
         />
     );
 };

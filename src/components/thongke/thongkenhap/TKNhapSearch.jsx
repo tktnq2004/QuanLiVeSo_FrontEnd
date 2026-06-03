@@ -1,7 +1,12 @@
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
-const TKNhapSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
+const TKNhapSearch = ({
+    filters,
+    onFilterChange,
+    doiTacs,
+    kyXos,
+}) => {
 
     return (
         <div className="tknhap-search">
@@ -33,13 +38,13 @@ const TKNhapSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
             />
 
             <Select
-                label="Kỳ sổ"
-                name="MaKySo"
-                value={filters.MaKySo}
+                label="Kỳ xổ"
+                name="MaKyXo"
+                value={filters.MaKyXo}
                 onChange={onFilterChange}
                 options={kyXos}
-                valueField="MaKySo"
-                labelField="MaKySo"
+                valueField="MaKyXo"     // DotPhatHanh.MaKyXo
+                labelField="MaKyXo"
             />
 
         </div>

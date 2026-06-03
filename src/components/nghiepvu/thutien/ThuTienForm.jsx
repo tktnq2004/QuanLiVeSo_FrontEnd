@@ -9,13 +9,12 @@ import Select from '../../common/Select/Select';
 const LOAI_THU_TIEN = 5;
 
 const initialState = {
-    MaDoiTac: '',
-    NgayGiao: new Date().toISOString().split('T')[0],
-    TienTra:  '',
-    MaHT:     '',
-    SoCT:     '',
-    GhiChu:   '',
-    // readonly — auto fill từ đối tác
+    MaDoiTac:  '',
+    NgayGiao:  new Date().toISOString().split('T')[0],
+    TienTra:   '',
+    MaHT:      '',
+    SoCT:      '',
+    GhiChu:    '',
     DiaChi:    '',
     DienThoai: '',
 };
@@ -29,7 +28,7 @@ const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
         if (selectedThuTien) {
             setFormData({
                 MaDoiTac:  selectedThuTien.MaDoiTac  || '',
-                NgayGiao:  selectedThuTien.NgayGiao   || '',
+                NgayGiao:  selectedThuTien.NgayGiao?.split('T')[0] || '',
                 TienTra:   selectedThuTien.TienTra    || '',
                 MaHT:      selectedThuTien.MaHT       || '',
                 SoCT:      selectedThuTien.SoCT       || '',
@@ -47,7 +46,6 @@ const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // Auto-fill thông tin khi chọn khách hàng
     const handleKHChange = (e) => {
         const { value } = e.target;
         const found = khachHangs.find(kh => kh.MaDoiTac === value);
@@ -59,8 +57,7 @@ const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
 
         if (!formData.MaDoiTac) {
             alert('Vui lòng chọn khách hàng');
@@ -78,21 +75,14 @@ const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
         try {
             setLoading(true);
 
-            if (selectedThuTien) {
-                // Thu tiền không có update — xóa rồi tạo lại
-                // hoặc tuỳ nghiệp vụ thực tế
-                alert('Chức năng chỉnh sửa chưa hỗ trợ');
-                return;
-            }
-
             await socaiService.createPhieu({
                 NgayGiao: formData.NgayGiao,
                 MaDoiTac: formData.MaDoiTac,
                 Loai:     LOAI_THU_TIEN,
                 TienTra:  Number(formData.TienTra),
-                MaHT:     formData.MaHT     || null,
-                SoCT:     formData.SoCT     || null,
-                GhiChu:   formData.GhiChu   || null,
+                MaHT:     formData.MaHT   || null,
+                SoCT:     formData.SoCT   || null,
+                GhiChu:   formData.GhiChu || null,
             });
 
             setFormData(initialState);
@@ -106,7 +96,7 @@ const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
 
             <Select
                 label="Khách hàng"
@@ -170,11 +160,11 @@ const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
                 onChange={handleChange}
             />
 
-            <Button type="submit" disabled={loading}>
-                {loading ? 'Đang lưu...' : selectedThuTien ? 'Cập nhật' : 'Lưu'}
+            <Button onClick={handleSubmit} disabled={loading}>
+                {loading ? 'Đang lưu...' : 'Lưu'}
             </Button>
 
-        </form>
+        </div>
     );
 };
 

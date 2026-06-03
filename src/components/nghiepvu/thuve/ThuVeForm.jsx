@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
 const ThuVeForm = ({ khachHang, formData, onChange }) => {
@@ -77,8 +77,9 @@ const ThuVeForm = ({ khachHang, formData, onChange }) => {
 
             <Input
                 label="Số CT"
-                value={selectedKH?.SoCT || ''}
-                disabled
+                name="SoCT"
+                value={formData.SoCT || ''}
+                onChange={handleChange}
             />
 
         </div>

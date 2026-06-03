@@ -1,28 +1,29 @@
 import { useEffect, useState } from 'react';
 import './NhapVe.scss';
 
-import socaiService from '../../../services/socai.service';
-import doitacService from '../../../services/doitac.service';
+import socaiService    from '../../../services/socai.service';
+import doitacService   from '../../../services/doitac.service';
 import dotphathanhService from '../../../services/dotphathanh.service';
 
-import NhapVeForm from './NhapVeForm';
+import NhapVeForm  from './NhapVeForm';
 import NhapVeTable from './NhapVeTable';
-import Button from '../../common/Button/Button';
+import Button      from '../../common/Button/Button';
 
 const LOAI_NHAP_VE = 1;
 
 const NhapVeList = () => {
 
-    const [nhaCungCap, setNhaCungCap] = useState([]);
+    const [nhaCungCap,  setNhaCungCap]  = useState([]);
     const [dotPhatHanh, setDotPhatHanh] = useState([]);
     const [dataLoading, setDataLoading] = useState(false);
+    const [loading,     setLoading]     = useState(false);
 
     const [formData, setFormData] = useState({
         MaDoiTac: '',
         NgayGiao: new Date().toISOString().split('T')[0],
+        SoCT:     '',
     });
 
-    // ── Fetch master data ────────────────────
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -43,62 +44,54 @@ const NhapVeList = () => {
     }, []);
 
     const emptyRow = () => ({
-        id: Date.now() + Math.random(),
-        MaDot: '',
-        SoCap: '',
-        MenhGia: '',
-        VeE: '',
+        id:       Date.now() + Math.random(),
+        MaDot:    '',
+        SoCap:    '',
+        MenhGia:  '',
+        VeE:      '',
+        TyLe:     '',
+        GiaTri:   '',
         ThucNhan: '',
-        GiaTri: '',
-        DonGia: '',
-        TTNhap: '',
-        GhiChu: '',
+        TTNhap:   '',
+        GhiChu:   '',
     });
 
-    const [rows, setRows] = useState([emptyRow()]);
+    const [rows,          setRows]          = useState([emptyRow()]);
     const [selectedRowId, setSelectedRowId] = useState(null);
-    const [loading, setLoading] = useState(false);
 
-    // ── Row selection ────────────────────────
     const handleSelectRow = (id) => {
         setSelectedRowId(prev => prev === id ? null : id);
     };
 
-    // ── Delete selected row ──────────────────
     const handleDeleteRow = () => {
-
         if (!selectedRowId) {
             alert('Vui lòng chọn hàng muốn xóa');
             return;
         }
-
         if (rows.length === 1) {
             alert('Phải có ít nhất 1 hàng');
             return;
         }
-
         setRows(prev => prev.filter(row => row.id !== selectedRowId));
         setSelectedRowId(null);
     };
 
-    // ── Reset form ───────────────────────────
     const handleReset = () => {
         setFormData({
             MaDoiTac: '',
             NgayGiao: new Date().toISOString().split('T')[0],
+            SoCT:     '',
         });
         setRows([emptyRow()]);
         setSelectedRowId(null);
     };
 
-    // ── Submit ───────────────────────────────
     const handleSubmit = async () => {
 
         if (!formData.MaDoiTac) {
             alert('Vui lòng chọn nhà cung cấp');
             return;
         }
-
         if (!formData.NgayGiao) {
             alert('Vui lòng chọn ngày giao');
             return;
@@ -112,20 +105,21 @@ const NhapVeList = () => {
         }
 
         try {
-
             setLoading(true);
 
             for (const row of validRows) {
                 await socaiService.createPhieu({
-                    NgayGiao: formData.NgayGiao,
-                    MaDoiTac: formData.MaDoiTac,
-                    Loai: LOAI_NHAP_VE,
-                    MaDot: row.MaDot,
-                    SoLuong: Number(row.SoCap) || 0,  // số cặp gốc
-                    DonGia: Number(row.MenhGia) || 0,  // mệnh giá
-                    VeE: Number(row.VeE) || 0,  // ← thêm vào
-                    TyLeThanhToan: Number(row.DonGia) || 1,  // tỉ lệ TT
-                    GhiChu: row.GhiChu || null,
+                    NgayGiao:      formData.NgayGiao,
+                    MaDoiTac:      formData.MaDoiTac,
+                    SoCT:          formData.SoCT || null,
+                    Loai:          LOAI_NHAP_VE,
+                    MaDot:         row.MaDot,
+                    SoLuong:       Number(row.SoCap)   || 0,
+                    MenhGia:       Number(row.MenhGia) || 0, // chỉ để tham khảo
+                    DonGia:        Number(row.MenhGia) || 0, // mệnh giá = đơn giá
+                    VeE:           Number(row.VeE)     || 0,
+                    TyLeThanhToan: Number(row.TyLe)    || 0,
+                    GhiChu:        row.GhiChu          || null,
                 });
             }
 
@@ -143,7 +137,6 @@ const NhapVeList = () => {
 
     return (
         <>
-
             <NhapVeForm
                 nhaCungCap={nhaCungCap}
                 formData={formData}
@@ -160,26 +153,15 @@ const NhapVeList = () => {
             />
 
             <div className="nhapve__actions">
-
-                <Button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                >
+                <Button onClick={handleSubmit} disabled={loading}>
                     {loading ? 'Đang lưu...' : 'Lưu'}
                 </Button>
-
-                <Button
-                    variant="danger"
-                    onClick={handleDeleteRow}
-                    disabled={loading}
-                >
+                <Button variant="danger" onClick={handleDeleteRow} disabled={loading}>
                     Xóa hàng
                 </Button>
-
             </div>
-
         </>
     );
 };
 
-export default NhapVeList
+export default NhapVeList;

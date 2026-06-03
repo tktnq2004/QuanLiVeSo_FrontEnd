@@ -16,10 +16,12 @@ const ThuVeList = () => {
   const [khachHang, setKhachHang] = useState([]);
   const [dotPhatHanh, setDotPhatHanh] = useState([]);
   const [dataLoading, setDataLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     MaDoiTac: '',
     NgayGiao: new Date().toISOString().split('T')[0],
+    SoCT: '',
   });
 
   useEffect(() => {
@@ -45,14 +47,15 @@ const ThuVeList = () => {
     id: Date.now() + Math.random(),
     MaDot: '',
     VeE: '',
-    DonGia: '',
+    MenhGia: '',
+    TyLe: '',
+    GiaTri: '',
     TTThu: '',
     GhiChu: '',
   });
 
   const [rows, setRows] = useState([emptyRow()]);
   const [selectedRowId, setSelectedRowId] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const handleSelectRow = (id) => {
     setSelectedRowId(prev => prev === id ? null : id);
@@ -75,6 +78,7 @@ const ThuVeList = () => {
     setFormData({
       MaDoiTac: '',
       NgayGiao: new Date().toISOString().split('T')[0],
+      SoCT: '',
     });
     setRows([emptyRow()]);
     setSelectedRowId(null);
@@ -105,12 +109,13 @@ const ThuVeList = () => {
         await socaiService.createPhieu({
           NgayGiao: formData.NgayGiao,
           MaDoiTac: formData.MaDoiTac,
+          SoCT: formData.SoCT || null,
           Loai: LOAI_THU_VE,
           MaDot: row.MaDot,
-          SoLuong: Number(row.VeE) || 0,  // số vé thu về
-          VeE: 0,
-          DonGia: Number(row.DonGia) || 0,
-          TyLeThanhToan: 100,
+          SoLuong: Number(row.VeE) || 0,  // thu vé: SoLuong = VeE
+          DonGia: Number(row.MenhGia) || 0,
+          VeE: 0,                          // thu vé không có dòng phụ
+          TyLeThanhToan: Number(row.TyLe) || 0,
           GhiChu: row.GhiChu || null,
         });
       }
@@ -129,7 +134,6 @@ const ThuVeList = () => {
 
   return (
     <>
-
       <ThuVeForm
         khachHang={khachHang}
         formData={formData}
@@ -146,17 +150,13 @@ const ThuVeList = () => {
       />
 
       <div className="thuve__actions">
-
         <Button onClick={handleSubmit} disabled={loading}>
           {loading ? 'Đang lưu...' : 'Lưu'}
         </Button>
-
         <Button variant="danger" onClick={handleDeleteRow} disabled={loading}>
           Xóa hàng
         </Button>
-
       </div>
-
     </>
   );
 };

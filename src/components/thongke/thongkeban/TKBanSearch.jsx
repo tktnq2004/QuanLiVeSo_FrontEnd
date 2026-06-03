@@ -1,4 +1,4 @@
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
 const TKBanSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
@@ -23,7 +23,7 @@ const TKBanSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
             />
 
             <Select
-                label="Nhà cung cấp"
+                label="Khách hàng"
                 name="MaDoiTac"
                 value={filters.MaDoiTac}
                 onChange={onFilterChange}
@@ -33,13 +33,13 @@ const TKBanSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
             />
 
             <Select
-                label="Kỳ sổ"
-                name="MaKySo"
-                value={filters.MaKySo}
+                label="Kỳ xổ"
+                name="MaKyXo"
+                value={filters.MaKyXo}
                 onChange={onFilterChange}
                 options={kyXos}
-                valueField="MaKySo"
-                labelField="MaKySo"
+                valueField="MaKyXo"
+                labelField="MaKyXo"
             />
 
         </div>

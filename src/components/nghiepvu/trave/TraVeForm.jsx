@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
 const TraVeForm = ({ nhaCungCap, formData, onChange }) => {
@@ -74,11 +74,14 @@ const TraVeForm = ({ nhaCungCap, formData, onChange }) => {
                 value={formData.NgayGiao}
                 onChange={handleChange}
             />
+
             <Input
                 label="Số CT"
-                value={selectedNCC?.SoCT || 'MỚI'}
-                disabled
+                name="SoCT"
+                value={formData.SoCT || ''}
+                onChange={handleChange}
             />
+
         </div>
     );
 };

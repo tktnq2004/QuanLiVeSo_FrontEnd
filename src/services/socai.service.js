@@ -24,13 +24,21 @@ const getByLoai = async (loai) => {
     const response = await api.get(`/socai/loai/${loai}`);
     return response.data;
 };
+const getThongKe = async (loai) => {
 
+    const response = await api.get(
+        `/socai/thongke/${loai}`
+    );
+
+    return response.data;
+};
 const socaiService = {
     createPhieu,
     deletePhieu,
     getByPhieu,
     getBaoCao,
     getByLoai,
+    getThongKe
 };
 
 export default socaiService;

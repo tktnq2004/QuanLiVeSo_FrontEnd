@@ -16,13 +16,14 @@ const BanVeList = () => {
     const [khachHang,   setKhachHang]   = useState([]);
     const [dotPhatHanh, setDotPhatHanh] = useState([]);
     const [dataLoading, setDataLoading] = useState(false);
+    const [loading,     setLoading]     = useState(false);
 
     const [formData, setFormData] = useState({
         MaDoiTac: '',
         NgayGiao: new Date().toISOString().split('T')[0],
+        SoCT:     '',
     });
 
-    // ── Fetch master data ────────────────────
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -43,28 +44,25 @@ const BanVeList = () => {
     }, []);
 
     const emptyRow = () => ({
-        id:       Date.now() + Math.random(),
-        MaDot:    '',
-        SoCap:    '',
-        MenhGia:  '',
-        VeE:      '',
-        ThucNhan: '',
-        GiaTri:   '',
-        DonGia:   '',
-        TTBan:    '',
-        GhiChu:   '',
+        id:      Date.now() + Math.random(),
+        MaDot:   '',
+        SoCap:   '',
+        MenhGia: '',
+        VeE:     '',
+        TyLe:    '',
+        GiaTri:  '',
+        ThucBan: '',
+        TTBan:   '',
+        GhiChu:  '',
     });
 
     const [rows,          setRows]          = useState([emptyRow()]);
     const [selectedRowId, setSelectedRowId] = useState(null);
-    const [loading,       setLoading]       = useState(false);
 
-    // ── Row selection ────────────────────────
     const handleSelectRow = (id) => {
         setSelectedRowId(prev => prev === id ? null : id);
     };
 
-    // ── Delete selected row ──────────────────
     const handleDeleteRow = () => {
         if (!selectedRowId) {
             alert('Vui lòng chọn hàng muốn xóa');
@@ -78,17 +76,16 @@ const BanVeList = () => {
         setSelectedRowId(null);
     };
 
-    // ── Reset ────────────────────────────────
     const handleReset = () => {
         setFormData({
             MaDoiTac: '',
             NgayGiao: new Date().toISOString().split('T')[0],
+            SoCT:     '',
         });
         setRows([emptyRow()]);
         setSelectedRowId(null);
     };
 
-    // ── Submit ───────────────────────────────
     const handleSubmit = async () => {
 
         if (!formData.MaDoiTac) {
@@ -114,13 +111,14 @@ const BanVeList = () => {
                 await socaiService.createPhieu({
                     NgayGiao:      formData.NgayGiao,
                     MaDoiTac:      formData.MaDoiTac,
+                    SoCT:          formData.SoCT   || null,
                     Loai:          LOAI_BAN_VE,
                     MaDot:         row.MaDot,
                     SoLuong:       Number(row.SoCap)   || 0,
-                    VeE:           Number(row.VeE)      || 0,
-                    DonGia:        Number(row.MenhGia)  || 0,
-                    TyLeThanhToan: Number(row.DonGia)   || 1,
-                    GhiChu:        row.GhiChu || null,
+                    DonGia:        Number(row.MenhGia) || 0,
+                    VeE:           Number(row.VeE)     || 0,
+                    TyLeThanhToan: Number(row.TyLe)    || 0,
+                    GhiChu:        row.GhiChu          || null,
                 });
             }
 
@@ -138,7 +136,6 @@ const BanVeList = () => {
 
     return (
         <>
-
             <BanVeForm
                 khachHang={khachHang}
                 formData={formData}
@@ -155,17 +152,13 @@ const BanVeList = () => {
             />
 
             <div className="banve__actions">
-
                 <Button onClick={handleSubmit} disabled={loading}>
                     {loading ? 'Đang lưu...' : 'Lưu'}
                 </Button>
-
                 <Button variant="danger" onClick={handleDeleteRow} disabled={loading}>
                     Xóa hàng
                 </Button>
-
             </div>
-
         </>
     );
 };

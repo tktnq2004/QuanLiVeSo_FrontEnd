@@ -2,24 +2,24 @@ import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
 const columns = [
-    { label: 'Đợt phát hành', field: 'MaDot',  type: 'select' },
+    { label: 'Đợt phát hành', field: 'MaDot',   type: 'select' },
     { label: 'Vé ế trả',      field: 'VeE' },
-    { label: 'Đơn giá',       field: 'DonGia' },
-    { label: 'TT trả',        field: 'TTTra',  disabled: true },
+    { label: 'Tỷ lệ TT (%)',  field: 'TyLe' },
+    { label: 'TT trả',        field: 'TTTra',   disabled: true },
     { label: 'Ghi chú',       field: 'GhiChu' },
 ];
 
-// TTTra = VeE × DonGia (backend sẽ tính chính xác, đây chỉ để hiển thị)
 const calcRow = (row) => {
 
-    const veE    = parseFloat(row.VeE)    || 0;
-    const donGia = parseFloat(row.DonGia) || 0;
+    const veE     = parseInt(row.VeE)     || 0;
+    const tyLe    = parseFloat(row.TyLe)  || 0;
 
-    const ttTra = veE * donGia / 100;
+    // TT trả = giá trị * tỷ lệ %
+    const ttTra = Math.round(veE * tyLe / 100);
 
     return {
         ...row,
-        TTTra: ttTra || '',
+        TTTra:  ttTra  >= 0 ? ttTra  : 0,
     };
 };
 
@@ -40,7 +40,6 @@ const TraVeTable = ({
                 : row
         );
 
-        // Tự thêm dòng mới khi chọn MaDot ở dòng cuối
         if (field === 'MaDot' && value) {
             const isLastRow = rows[rows.length - 1].id === rowId;
             if (isLastRow) {
