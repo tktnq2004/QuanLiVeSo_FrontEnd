@@ -8,6 +8,7 @@ import dotphathanhService from '../../../services/dotphathanh.service';
 import TKBanTable  from './TKBanTable';
 import TKBanSearch from './TKBanSearch';
 import Loading     from '../../common/Loading/Loading';
+import GetWeekRange from '../../../untils/getWeekRange';
 
 import '../../../styles/thongkeSearch.scss';
 
@@ -19,8 +20,7 @@ const TKBanList = () => {
     const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({
-        TuNgay:   '',
-        DenNgay:  '',
+        ...GetWeekRange(),
         MaDoiTac: '',
         MaKyXo:   '',
     });

@@ -8,6 +8,7 @@ import dotphathanhService from '../../../services/dotphathanh.service';
 import TKNhapTable  from './TKNhapTable';
 import TKNhapSearch from './TKNhapSearch';
 import Loading      from '../../common/Loading/Loading';
+import GetWeekRange from '../../../untils/getWeekRange';
 
 import '../../../styles/thongkeSearch.scss';
 
@@ -19,8 +20,7 @@ const TKNhapList = () => {
     const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({
-        TuNgay:   '',
-        DenNgay:  '',
+        ...GetWeekRange(),
         MaDoiTac: '',
         MaKyXo:   '',
     });

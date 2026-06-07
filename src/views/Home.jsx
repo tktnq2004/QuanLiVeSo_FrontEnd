@@ -38,6 +38,8 @@ const baoCaoItems = [
     { to: '/ThongKeChi', icon: TrendingDown, label: 'Thống kê chi' },
     { to: '/ThongKeThu', icon: ArrowDownCircle, label: 'Thống kê thu' },
     { to: '/ThongKeLoiNhuan', icon: PiggyBank, label: 'Thống kê lợi nhuận' },
+    { to: '/ThongKeCongNo', icon: FileText, label: 'Công nợ' },
+    { to: '/ThongKeChiTietCongNo', icon: BookOpen, label: 'Chi tiết công nợ' },
 ];
 
 const DashboardLayout = () => {

@@ -1,40 +1,40 @@
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import socaiService from '../../../services/socai.service';
 import doitacService from '../../../services/doitac.service';
-import dotphathanhService from '../../../services/dotphathanh.service';
+import htttService from '../../../services/hinhthucthanhtoan.service';
 
 import TKThuTable from './TKThuTable';
 import TKThuSearch from './TKThuSearch';
 import Loading from '../../common/Loading/Loading';
+import GetWeekRange from '../../../untils/getWeekRange';
+
 import '../../../styles/thongkeSearch.scss';
 
-import { toast } from 'react-toastify';
-
 const TKThuList = () => {
+    const [filters, setFilters] = useState({
+        ...GetWeekRange(),
+        MaDoiTac: '',
+        MaHT: '',
+    });
 
     const [records, setRecords] = useState([]);
     const [doiTacs, setDoiTacs] = useState([]);
+    const [httts, setHttts] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const [filters, setFilters] = useState({
-        TuNgay: new Date().toISOString().split('T')[0],
-        DenNgay: new Date().toISOString().split('T')[0],
-        MaDoiTac: ''
-    });
 
     const fetchData = async () => {
         try {
             setLoading(true);
-
-            const [data, doiTacData] = await Promise.all([
-                socaiService.getAll(),
-                doitacService.getAll()
+            const [data, doiTacData, htttData] = await Promise.all([
+                socaiService.getByLoai(5),
+                doitacService.getAll(),
+                htttService.getAll(),
             ]);
-
             setRecords(data);
             setDoiTacs(doiTacData);
-
+            setHttts(htttData);
         } catch (err) {
             toast.error('Không thể tải dữ liệu');
         } finally {
@@ -42,9 +42,7 @@ const TKThuList = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useEffect(() => { fetchData(); }, []);
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -52,39 +50,36 @@ const TKThuList = () => {
     };
 
     const filteredRecords = useMemo(() => {
+
         return records.filter(item => {
 
-            const ngay = new Date(item.NgayGiao);
+            const ngay = item.NgayGiao?.split('T')[0];
 
-            const tuNgay = filters.TuNgay ? new Date(filters.TuNgay) : null;
-            const denNgay = filters.DenNgay ? new Date(filters.DenNgay) : null;
-
-            if (tuNgay && ngay < tuNgay) return false;
-            if (denNgay && ngay > denNgay) return false;
-
-            if (filters.MaDoiTac &&
-                item.MaDoiTac !== filters.MaDoiTac) return false;
-
+            if (filters.TuNgay && ngay < filters.TuNgay)
+                return false;
+            if (filters.DenNgay && ngay > filters.DenNgay)
+                return false;
+            if (filters.MaDoiTac && item.MaDoiTac !== filters.MaDoiTac)
+                return false;
+            if (filters.MaHT && item.MaHT !== filters.MaHT)
+                return false;
 
             return true;
         });
+
     }, [records, filters]);
 
     if (loading) return <Loading />;
 
     return (
         <div>
-
             <TKThuSearch
                 filters={filters}
                 onFilterChange={handleFilterChange}
                 doiTacs={doiTacs}
+                httts={httts}
             />
-
-            <TKThuTable
-                records={filteredRecords}
-            />
-
+            <TKThuTable records={filteredRecords} />
         </div>
     );
 };

@@ -1,7 +1,7 @@
-import Input from '../../common/Input/Input';
+import Input  from '../../common/Input/Input';
 import Select from '../../common/Select/Select';
 
-const TKChiSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
+const TKChiSearch = ({ filters, onFilterChange, doiTacs, httts }) => {
 
     return (
         <div className="tknhap-search">
@@ -23,7 +23,7 @@ const TKChiSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
             />
 
             <Select
-                label="Nhà cung cấp"
+                label="Đối tác"
                 name="MaDoiTac"
                 value={filters.MaDoiTac}
                 onChange={onFilterChange}
@@ -32,6 +32,15 @@ const TKChiSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
                 labelField="TenDoiTac"
             />
 
+            <Select
+                label="Hình thức TT"
+                name="MaHT"
+                value={filters.MaHT}
+                onChange={onFilterChange}
+                options={httts}
+                valueField="MaHT"
+                labelField="TenHT"
+            />
 
         </div>
     );

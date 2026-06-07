@@ -1,43 +1,43 @@
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import socaiService from '../../../services/socai.service';
 import doitacService from '../../../services/doitac.service';
-import dotphathanhService from '../../../services/dotphathanh.service';
+import htttService from '../../../services/hinhthucthanhtoan.service';
 
 import TKChiTable from './TKChiTable';
 import TKChiSearch from './TKChiSearch';
 import Loading from '../../common/Loading/Loading';
-import '../../../styles/thongkeSearch.scss';
+import GetWeekRange from '../../../untils/getWeekRange';
 
-import { toast } from 'react-toastify';
+import '../../../styles/thongkeSearch.scss';
 
 const TKChiList = () => {
 
     const [records, setRecords] = useState([]);
     const [doiTacs, setDoiTacs] = useState([]);
-    const [kyXos, setKyXos] = useState([]);
+    const [httts, setHttts] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    
+
     const [filters, setFilters] = useState({
-        TuNgay: new Date().toISOString().split('T')[0],
-        DenNgay: new Date().toISOString().split('T')[0],
-        MaDoiTac: ''
+        ...GetWeekRange(),
+        MaDoiTac: '',
+        MaHT: '',
     });
 
     const fetchData = async () => {
         try {
             setLoading(true);
-
-            const [data, doiTacData, kyXoData] = await Promise.all([
-                socaiService.getAll(),
+            const [data, doiTacData, htttData] = await Promise.all([
+                socaiService.getByLoai(6),
                 doitacService.getAll(),
-                dotphathanhService.getAll()
+                htttService.getAll(),
             ]);
-
             setRecords(data);
             setDoiTacs(doiTacData);
-            setKyXos(kyXoData);
-
+            setHttts(htttData);
         } catch (err) {
             toast.error('Không thể tải dữ liệu');
         } finally {
@@ -45,9 +45,7 @@ const TKChiList = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    useEffect(() => { fetchData(); }, []);
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -55,40 +53,36 @@ const TKChiList = () => {
     };
 
     const filteredRecords = useMemo(() => {
+
         return records.filter(item => {
 
-            const ngay = new Date(item.NgayGiao);
+            const ngay = item.NgayGiao?.split('T')[0];
 
-            const tuNgay = filters.TuNgay ? new Date(filters.TuNgay) : null;
-            const denNgay = filters.DenNgay ? new Date(filters.DenNgay) : null;
-
-            if (tuNgay && ngay < tuNgay) return false;
-            if (denNgay && ngay > denNgay) return false;
-
-            if (filters.MaDoiTac &&
-                item.MaDoiTac !== filters.MaDoiTac) return false;
-;
+            if (filters.TuNgay && ngay < filters.TuNgay)
+                return false;
+            if (filters.DenNgay && ngay > filters.DenNgay)
+                return false;
+            if (filters.MaDoiTac && item.MaDoiTac !== filters.MaDoiTac)
+                return false;
+            if (filters.MaHT && item.MaHT !== filters.MaHT)
+                return false;
 
             return true;
         });
+
     }, [records, filters]);
 
     if (loading) return <Loading />;
 
     return (
         <div>
-
             <TKChiSearch
                 filters={filters}
                 onFilterChange={handleFilterChange}
                 doiTacs={doiTacs}
-                kyXos={kyXos}
+                httts={httts}
             />
-
-            <TKChiTable
-                records={filteredRecords}
-            />
-
+            <TKChiTable records={filteredRecords} />
         </div>
     );
 };

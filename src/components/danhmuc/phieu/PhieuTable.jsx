@@ -1,6 +1,8 @@
 import Table from '../../common/Table/Table';
 import Button from '../../common/Button/Button';
 
+import formatDate from '../../../untils/formatDate';
+
 const PhieuTable = ({
     phieus,
     onDelete
@@ -9,13 +11,9 @@ const PhieuTable = ({
     const columns = [
 
         {
-            key: 'ID',
-            title: 'ID'
-        },
-
-        {
             key: 'NgayGiao',
-            title: 'Ngày giao'
+            title: 'Ngày giao',
+            render: (row) => formatDate(row.NgayGiao),
         },
 
         {

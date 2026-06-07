@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react';
 
 import phieuService from '../../../services/phieu.service';
 
-import PhieuModal from './PhieuModal';
 import PhieuTable from './PhieuTable';
 
-import Button from '../../common/Button/Button';
 import Loading from '../../common/Loading/Loading';
 
 import { toast } from 'react-toastify';
@@ -15,8 +13,6 @@ const PhieuList = () => {
     const [phieus, setPhieus] = useState([]);
 
     const [loading, setLoading] = useState(false);
-
-    const [showModal, setShowModal] = useState(false);
 
     const fetchData = async () => {
 
@@ -83,35 +79,12 @@ const PhieuList = () => {
                 }}
             >
 
-                <Button
-                    onClick={() => setShowModal(true)}
-                >
-                    Tạo Phiếu
-                </Button>
             </div>
 
             <PhieuTable
                 phieus={phieus}
                 onDelete={handleDelete}
             />
-
-            {
-                showModal && (
-
-                    <PhieuModal
-                        onClose={() =>
-                            setShowModal(false)
-                        }
-                        onSuccess={() => {
-
-                            fetchData();
-
-                            setShowModal(false);
-                        }}
-                    />
-                )
-            }
-
         </div>
     );
 };

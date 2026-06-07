@@ -10,6 +10,11 @@ const deletePhieu = async (id) => {
     return response.data;
 };
 
+const getAll = async () => {
+    const response = await api.get('/socai');
+    return response.data;
+};
+
 const getByPhieu = async (id) => {
     const response = await api.get(`/socai/${id}`);
     return response.data;
@@ -26,19 +31,37 @@ const getByLoai = async (loai) => {
 };
 const getThongKe = async (loai) => {
 
-    const response = await api.get(
-        `/socai/thongke/${loai}`
-    );
-
+    const response = await api.get(`/socai/thongke/${loai}`);
     return response.data;
 };
+
+const getLoiNhuan = async (params = {}) => {
+    const response = await api.get('/socai/loinhuan', { params });
+    return response.data;
+};
+
+const getCongNo = async (params = {}) => {
+    const response = await api.get('/socai/congno', { params });
+    return response.data;
+};
+const getChiTietCongNo = async (params = {}) => {
+    const response = await api.get('/socai/chitietcongno', { params });
+    return response.data;
+};
+
+
 const socaiService = {
     createPhieu,
     deletePhieu,
     getByPhieu,
     getBaoCao,
     getByLoai,
-    getThongKe
+    getThongKe,
+    getLoiNhuan,
+    getCongNo,
+    getChiTietCongNo,
+    getAll,
+    
 };
 
 export default socaiService;

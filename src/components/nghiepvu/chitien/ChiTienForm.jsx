@@ -96,7 +96,7 @@ const ChiTienForm = ({ doiTacs, httts, selectedChiTien, onSuccess }) => {
     };
 
     return (
-        <div>
+        <div className="chitien-form">
 
             <Select
                 label="Đối tác"

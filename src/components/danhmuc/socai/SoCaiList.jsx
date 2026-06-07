@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react';
 import socaiService from '../../../services/socai.service';
 
 import SoCaiTable from './SoCaiTable';
-import SoCaiModal from './SoCaiModal';
 
-import Button from '../../common/Button/Button';
 import Loading from '../../common/Loading/Loading';
 
 import { toast } from 'react-toastify';
@@ -15,8 +13,6 @@ const SoCaiList = () => {
     const [records, setRecords] = useState([]);
 
     const [loading, setLoading] = useState(false);
-
-    const [showModal, setShowModal] = useState(false);
 
     const fetchData = async () => {
 
@@ -82,12 +78,6 @@ const SoCaiList = () => {
                     marginBottom: '20px'
                 }}
             >
-
-                <Button
-                    onClick={() => setShowModal(true)}
-                >
-                    Add Sổ Cái
-                </Button>
             </div>
 
             <SoCaiTable
@@ -95,22 +85,7 @@ const SoCaiList = () => {
                 handleDelete={handleDelete}
             />
 
-            {
-                showModal && (
-
-                    <SoCaiModal
-                        onClose={() =>
-                            setShowModal(false)
-                        }
-                        onSuccess={() => {
-
-                            fetchData();
-
-                            setShowModal(false);
-                        }}
-                    />
-                )
-            }
+            
 
         </div>
     );

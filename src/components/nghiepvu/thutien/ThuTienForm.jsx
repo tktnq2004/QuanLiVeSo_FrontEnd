@@ -96,7 +96,7 @@ const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
     };
 
     return (
-        <div>
+        <div className="thutien-form">
 
             <Select
                 label="Khách hàng"
@@ -147,7 +147,7 @@ const ThuTienForm = ({ khachHangs, httts, selectedThuTien, onSuccess }) => {
             />
 
             <Input
-                label="Số chứng từ"
+                label="Số CT"
                 name="SoCT"
                 value={formData.SoCT}
                 onChange={handleChange}

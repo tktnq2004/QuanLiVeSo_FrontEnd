@@ -1,23 +1,22 @@
 import { useEffect, useState } from 'react';
 
-import socaiService   from '../../../services/socai.service';
-import doitacService  from '../../../services/doitac.service';
-import htttService    from '../../../services/hinhthucthanhtoan.service';
+import socaiService from '../../../services/socai.service';
+import doitacService from '../../../services/doitac.service';
+import htttService from '../../../services/hinhthucthanhtoan.service';
 
-import ThuTienModal from './ThuTienModal';
+import ThuTienForm from './ThuTienForm';
 import ThuTienTable from './ThuTienTable';
-import Button       from '../../common/Button/Button';
+import './ThuTien.scss';
 
 const LOAI_THU_TIEN = 5;
 
 const ThuTienList = () => {
 
-    const [thuTiens,    setThuTiens]    = useState([]);
-    const [khachHangs,  setKhachHangs]  = useState([]);
-    const [httts,       setHttts]       = useState([]);
+    const [thuTiens, setThuTiens] = useState([]);
+    const [khachHangs, setKhachHangs] = useState([]);
+    const [httts, setHttts] = useState([]);
     const [selectedThuTien, setSelectedThuTien] = useState(null);
-    const [showModal,   setShowModal]   = useState(false);
-    const [loading,     setLoading]     = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -39,14 +38,9 @@ const ThuTienList = () => {
 
     useEffect(() => { fetchData(); }, []);
 
-    const handleAdd = () => {
-        setSelectedThuTien(null);
-        setShowModal(true);
-    };
 
     const handleEdit = (item) => {
         setSelectedThuTien(item);
-        setShowModal(true);
     };
 
     const handleDelete = async (id) => {
@@ -60,22 +54,24 @@ const ThuTienList = () => {
     };
 
     const handleSuccess = async () => {
-        setShowModal(false);
         setSelectedThuTien(null);
         await fetchData();
     };
 
     const handleClose = () => {
-        setShowModal(false);
         setSelectedThuTien(null);
     };
 
     return (
-        <div>
+        <>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <Button onClick={handleAdd}>Thêm thu tiền</Button>
-            </div>
+            <ThuTienForm
+                khachHangs={khachHangs}
+                httts={httts}
+                selectedThuTien={selectedThuTien}
+                onClose={handleClose}
+                onSuccess={handleSuccess}
+            />
 
             {loading ? (
                 <p>Loading...</p>
@@ -87,17 +83,9 @@ const ThuTienList = () => {
                 />
             )}
 
-            {showModal && (
-                <ThuTienModal
-                    khachHangs={khachHangs}
-                    httts={httts}
-                    selectedThuTien={selectedThuTien}
-                    onClose={handleClose}
-                    onSuccess={handleSuccess}
-                />
-            )}
 
-        </div>
+
+        </>
     );
 };
 

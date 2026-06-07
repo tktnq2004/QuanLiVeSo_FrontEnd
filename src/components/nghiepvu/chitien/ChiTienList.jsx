@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 
-import socaiService  from '../../../services/socai.service';
+import socaiService from '../../../services/socai.service';
 import doitacService from '../../../services/doitac.service';
-import htttService   from '../../../services/hinhthucthanhtoan.service';
+import htttService from '../../../services/hinhthucthanhtoan.service';
 
-import ChiTienModal from './ChiTienModal';
+import ChiTienForm from './ChiTienForm';
 import ChiTienTable from './ChiTienTable';
-import Button       from '../../common/Button/Button';
+
+import './ChiTien.scss';
 
 const LOAI_CHI_TIEN = 6;
 
 const ChiTienList = () => {
 
-    const [chiTiens,       setChiTiens]       = useState([]);
-    const [doiTacs,        setDoiTacs]        = useState([]);
-    const [httts,          setHttts]          = useState([]);
+    const [chiTiens, setChiTiens] = useState([]);
+    const [doiTacs, setDoiTacs] = useState([]);
+    const [httts, setHttts] = useState([]);
     const [selectedChiTien, setSelectedChiTien] = useState(null);
-    const [showModal,      setShowModal]      = useState(false);
-    const [loading,        setLoading]        = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -39,14 +39,8 @@ const ChiTienList = () => {
 
     useEffect(() => { fetchData(); }, []);
 
-    const handleAdd = () => {
-        setSelectedChiTien(null);
-        setShowModal(true);
-    };
-
     const handleEdit = (item) => {
         setSelectedChiTien(item);
-        setShowModal(true);
     };
 
     const handleDelete = async (id) => {
@@ -60,22 +54,24 @@ const ChiTienList = () => {
     };
 
     const handleSuccess = async () => {
-        setShowModal(false);
         setSelectedChiTien(null);
         await fetchData();
     };
 
     const handleClose = () => {
-        setShowModal(false);
         setSelectedChiTien(null);
     };
 
     return (
-        <div>
+        <>
 
-            <div style={{ marginBottom: '20px' }}>
-                <Button onClick={handleAdd}>Thêm chi tiền</Button>
-            </div>
+            <ChiTienForm
+                doiTacs={doiTacs}
+                httts={httts}
+                selectedChiTien={selectedChiTien}
+                onClose={handleClose}
+                onSuccess={handleSuccess}
+            />
 
             {loading ? (
                 <p>Loading...</p>
@@ -87,17 +83,8 @@ const ChiTienList = () => {
                 />
             )}
 
-            {showModal && (
-                <ChiTienModal
-                    doiTacs={doiTacs}
-                    httts={httts}
-                    selectedChiTien={selectedChiTien}
-                    onClose={handleClose}
-                    onSuccess={handleSuccess}
-                />
-            )}
 
-        </div>
+        </>
     );
 };
 

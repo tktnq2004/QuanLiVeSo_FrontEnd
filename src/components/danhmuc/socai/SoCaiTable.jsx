@@ -3,6 +3,7 @@ import Table from '../../common/Table/Table';
 import Button from '../../common/Button/Button';
 
 import formatCurrency from '../../../untils/formatCurrency';
+import formatDate from '../../../untils/formatDate';
 
 const SoCaiTable = ({
     records,
@@ -13,7 +14,8 @@ const SoCaiTable = ({
 
         {
             key: 'NgayGiao',
-            title: 'Ngày giao'
+            title: 'Ngày giao',
+            render: (row) => formatDate(row.NgayGiao),
         },
 
         {

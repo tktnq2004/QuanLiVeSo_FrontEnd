@@ -1,10 +1,9 @@
 import Input from '../../common/Input/Input';
-import Select from '../../common/Select/Select';
 
-const TKLoiNhuanSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
+const TKLoiNhuanSearch = ({ filters, onFilterChange }) => {
 
     return (
-        <div className="tkloinhuan-search">
+        <div className="tknhap-search">
 
             <Input
                 type="date"
@@ -21,7 +20,6 @@ const TKLoiNhuanSearch = ({ filters, onFilterChange, doiTacs, kyXos }) => {
                 value={filters.DenNgay}
                 onChange={onFilterChange}
             />
-
 
         </div>
     );
