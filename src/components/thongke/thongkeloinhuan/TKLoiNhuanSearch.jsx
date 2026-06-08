@@ -8,16 +8,16 @@ const TKLoiNhuanSearch = ({ filters, onFilterChange }) => {
             <Input
                 type="date"
                 label="Từ ngày"
-                name="TuNgay"
-                value={filters.TuNgay}
+                name="tuNgay"
+                value={filters.tuNgay}
                 onChange={onFilterChange}
             />
 
             <Input
                 type="date"
                 label="Đến ngày"
-                name="DenNgay"
-                value={filters.DenNgay}
+                name="denNgay"
+                value={filters.denNgay}
                 onChange={onFilterChange}
             />
 

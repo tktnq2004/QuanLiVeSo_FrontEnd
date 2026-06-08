@@ -7,7 +7,7 @@ import doitacService from '../../../services/doitac.service';
 import ChiTietCongNoTable from './ChiTietCongNoTable';
 import ChiTietCongNoSearch from './ChiTietCongNoSearch';
 import Loading from '../../common/Loading/Loading';
-import getWeekRange from '../../../utils/getWeekRange';
+import GetWeekRange from '../../../utils/getWeekRange';
 
 import '../../../styles/thongkeSearch.scss';
 
@@ -19,7 +19,7 @@ const ChiTietCongNoList = () => {
     const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({
-        ...getWeekRange(),
+        ...GetWeekRange(),
         maDoiTac: 'tatCa',
     });
 

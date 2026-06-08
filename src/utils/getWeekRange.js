@@ -11,8 +11,8 @@ const getWeekRange = () => {
     end.setDate(start.getDate() + 6);
 
     return {
-        TuNgay: start.toISOString().split('T')[0],
-        DenNgay: end.toISOString().split('T')[0],
+        tuNgay: start.toISOString().split('T')[0],
+        denNgay: end.toISOString().split('T')[0],
     };
 };
 export default getWeekRange;

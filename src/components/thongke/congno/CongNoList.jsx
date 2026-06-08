@@ -9,8 +9,6 @@ import Loading from '../../common/Loading/Loading';
 import GetWeekRange from '../../../utils/getWeekRange';
 import '../../../styles/thongkeSearch.scss';
 
-
-
 const CongNoList = () => {
 
     const [records, setRecords] = useState([]);

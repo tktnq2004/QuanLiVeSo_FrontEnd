@@ -29,7 +29,7 @@ const TKBanList = () => {
         try {
             setLoading(true);
             const [data, doiTacData, dotData] = await Promise.all([
-                socaiService.getThongKe(2),     // Loai 2 = Bán vé
+                socaiService.getThongKe(2),    
                 doitacService.getAll(),
                 dotphathanhService.getAll(),
             ]);
