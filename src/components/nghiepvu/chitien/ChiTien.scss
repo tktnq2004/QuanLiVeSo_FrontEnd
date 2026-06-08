@@ -1,0 +1,77 @@
+.chitien {
+    padding: 24px;
+    background-color: #f9fafb;
+    min-height: 100%;
+
+
+    &__card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 8px;
+
+        .custom-button {
+            min-width: 120px; 
+            width: auto;
+        }
+    }
+}
+
+// ===== FORM =====
+// 4 cột: label | input | label | input
+.chitien-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); // 3 cột bằng nhau
+    grid-template-rows: repeat(3, auto); // 3 hàng
+    gap: 16px;
+
+    .select-group,
+    .input-group {
+        width: 100%;
+    }
+
+    .custom-select,
+    .custom-input {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+.chitien-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    table-layout: fixed; // chia đều cột
+
+    th {
+        padding: 10px 12px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        background-color: #f3f4f6;
+        border-bottom: 1px solid #e5e7eb;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 6px 8px;
+        border-bottom: 1px solid #f3f4f6;
+
+        .custom-input,
+        .custom-select {
+            width: 100%;
+            margin: 0;
+            height: 36px; // đồng nhất chiều cao
+            font-size: 13px;
+        }
+    }
+}
+    

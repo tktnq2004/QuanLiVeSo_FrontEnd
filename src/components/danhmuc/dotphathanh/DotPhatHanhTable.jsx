@@ -1,13 +1,10 @@
 import Table from '../../common/Table/Table';
 import Button from '../../common/Button/Button';
+import formatDate from '../../../untils/formatDate';
 
 const DotPhatHanhTable = ({ dotphathanhs, onEdit, onDelete }) => {
 
     const columns = [
-        {
-            key: 'MaDot',
-            title: 'Mã đợt'
-        },
         {
             key: 'TenCap',
             title: 'Cặp vé'
@@ -15,9 +12,7 @@ const DotPhatHanhTable = ({ dotphathanhs, onEdit, onDelete }) => {
         {
             key: 'NgayXo',
             title: 'Ngày xổ',
-            render: (item) => item.NgayXo  // fix: format date
-                ? new Date(item.NgayXo).toLocaleDateString('vi-VN')
-                : ''
+            render: (item) => formatDate(item.NgayXo)
         },
         {
             key: 'MaKyXo',
@@ -30,7 +25,7 @@ const DotPhatHanhTable = ({ dotphathanhs, onEdit, onDelete }) => {
         {
             key: 'NgayGioTao',
             title: 'Ngày giờ tạo',
-            render: (item) => item.NgayGioTao
+            render: (item) => formatDate(item.NgayGioTao)
                 ? new Date(item.NgayGioTao).toLocaleString('vi-VN')
                 : ''
         }
