@@ -1,38 +1,38 @@
-import Table  from '../../common/Table/Table';
+import Table from '../../common/Table/Table';
 import Button from '../../common/Button/Button';
 
-import formatDate     from '../../../untils/formatDate';
-import formatCurrency from '../../../untils/formatCurrency';
+import formatDate from '../../../utils/formatDate';
+import formatCurrency from '../../../utils/formatCurrency';
 
 const ChiTienTable = ({ chiTiens, onEdit, onDelete }) => {
 
     const columns = [
         {
-            key:   'SoCT',
+            key: 'SoCT',
             title: 'Số CT',
         },
         {
-            key:    'NgayGiao',
-            title:  'Ngày',
+            key: 'NgayGiao',
+            title: 'Ngày',
             render: (item) => formatDate(item.NgayGiao),
         },
         {
-            key:    'MaDoiTac',
-            title:  'Đối tác',
+            key: 'MaDoiTac',
+            title: 'Đối tác',
             render: (item) => item.TenDoiTac || item.MaDoiTac || '',
         },
         {
-            key:    'ThanhTien',
-            title:  'Số tiền',
+            key: 'ThanhTien',
+            title: 'Số tiền',
             render: (item) => formatCurrency(item.ThanhTien),
         },
         {
-            key:    'MaHT',
-            title:  'Hình thức TT',
+            key: 'MaHT',
+            title: 'Hình thức TT',
             render: (item) => item.TenHT || item.MaHT || '',
         },
         {
-            key:   'GhiChu',
+            key: 'GhiChu',
             title: 'Ghi chú',
         },
     ];

@@ -1,6 +1,6 @@
 import Table from '../../common/Table/Table';
-import formatCurrency from '../../../untils/formatCurrency';
-import formatDate from '../../../untils/formatDate';
+import formatCurrency from '../../../utils/formatCurrency';
+import formatDate from '../../../utils/formatDate';
 
 const LOAI_CONFIG = {
     1: { label: 'Nhập', },

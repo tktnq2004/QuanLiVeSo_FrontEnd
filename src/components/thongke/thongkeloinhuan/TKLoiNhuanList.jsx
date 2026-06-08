@@ -8,7 +8,7 @@ import TKLoiNhuanSearch from './TKLoiNhuanSearch';
 import Loading from '../../common/Loading/Loading';
 
 import '../../../styles/thongkeSearch.scss';
-import GetWeekRange from '../../../untils/getWeekRange';
+import GetWeekRange from '../../../utils/getWeekRange';
 
 const TKLoiNhuanList = () => {
 
@@ -42,7 +42,7 @@ const TKLoiNhuanList = () => {
         }
 
     }, [filters.TuNgay, filters.DenNgay]);
-    
+
     useEffect(() => {
         fetchData();
     }, [fetchData]);

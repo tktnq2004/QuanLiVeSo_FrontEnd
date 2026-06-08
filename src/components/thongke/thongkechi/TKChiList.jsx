@@ -8,7 +8,7 @@ import htttService from '../../../services/hinhthucthanhtoan.service';
 import TKChiTable from './TKChiTable';
 import TKChiSearch from './TKChiSearch';
 import Loading from '../../common/Loading/Loading';
-import GetWeekRange from '../../../untils/getWeekRange';
+import GetWeekRange from '../../../utils/getWeekRange';
 
 import '../../../styles/thongkeSearch.scss';
 
@@ -19,7 +19,7 @@ const TKChiList = () => {
     const [httts, setHttts] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    
+
 
     const [filters, setFilters] = useState({
         ...GetWeekRange(),

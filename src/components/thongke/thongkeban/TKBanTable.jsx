@@ -1,6 +1,6 @@
 import Table from '../../common/Table/Table';
-import formatCurrency from '../../../untils/formatCurrency';
-import formatDate from '../../../untils/formatDate';
+import formatCurrency from '../../../utils/formatCurrency';
+import formatDate from '../../../utils/formatDate';
 
 const TKBanTable = ({ records }) => {
 
@@ -51,7 +51,7 @@ const TKBanTable = ({ records }) => {
         },
         {
             key: 'ThucTinh',
-            title: 'Thực bán',        
+            title: 'Thực bán',
             render: (row) => formatCurrency(row.GiaTri - row.VeE),
         },
         {

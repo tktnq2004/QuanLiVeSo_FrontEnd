@@ -1,28 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 
-import socaiService  from '../../../services/socai.service';
+import socaiService from '../../../services/socai.service';
 import doitacService from '../../../services/doitac.service';
 
-import ChiTietCongNoTable  from './ChiTietCongNoTable';
+import ChiTietCongNoTable from './ChiTietCongNoTable';
 import ChiTietCongNoSearch from './ChiTietCongNoSearch';
-import Loading               from '../../common/Loading/Loading';
+import Loading from '../../common/Loading/Loading';
+import getWeekRange from '../../../utils/getWeekRange';
 
 import '../../../styles/thongkeSearch.scss';
 
-const getWeekRange = () => {
-    const today = new Date();
-    const day   = today.getDay();
-    const diffStart = day === 0 ? -6 : 1 - day;
-    const start = new Date(today);
-    start.setDate(today.getDate() + diffStart);
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-    return {
-        tuNgay:  start.toISOString().split('T')[0],
-        denNgay: end.toISOString().split('T')[0],
-    };
-};
 
 const ChiTietCongNoList = () => {
 
@@ -47,7 +35,7 @@ const ChiTietCongNoList = () => {
         fetchDoiTac();
     }, []);
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             setLoading(true);
             const data = await socaiService.getChiTietCongNo(filters);
@@ -57,15 +45,11 @@ const ChiTietCongNoList = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filters]);
 
     useEffect(() => {
         fetchData();
-    }, [
-        filters.tuNgay,
-        filters.denNgay,
-        filters.maDoiTac,
-    ]);
+    }, [fetchData]);
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;

@@ -1,7 +1,7 @@
 import Table from '../../common/Table/Table';
 import Button from '../../common/Button/Button';
 
-import formatDate from '../../../untils/formatDate';
+import formatDate from '../../../utils/formatDate';
 
 const PhieuTable = ({
     phieus,

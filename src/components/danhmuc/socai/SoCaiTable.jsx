@@ -2,8 +2,8 @@ import Table from '../../common/Table/Table';
 
 import Button from '../../common/Button/Button';
 
-import formatCurrency from '../../../untils/formatCurrency';
-import formatDate from '../../../untils/formatDate';
+import formatCurrency from '../../../utils/formatCurrency';
+import formatDate from '../../../utils/formatDate';
 
 const SoCaiTable = ({
     records,

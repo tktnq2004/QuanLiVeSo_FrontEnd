@@ -1,40 +1,40 @@
 import Table from '../../common/Table/Table';
-import formatCurrency from '../../../untils/formatCurrency';
-import formatDate     from '../../../untils/formatDate';
+import formatCurrency from '../../../utils/formatCurrency';
+import formatDate from '../../../utils/formatDate';
 
 const TKThuTienTable = ({ records }) => {
 
     const columns = [
         {
-            key:   'SoCT',
+            key: 'SoCT',
             title: 'Số CT',
         },
         {
-            key:    'NgayGiao',
-            title:  'Ngày',
+            key: 'NgayGiao',
+            title: 'Ngày',
             render: (row) => formatDate(row.NgayGiao),
         },
         {
-            key:    'MaDoiTac',
-            title:  'Mã KH',
+            key: 'MaDoiTac',
+            title: 'Mã KH',
         },
         {
-            key:    'TenDoiTac',
-            title:  'Khách hàng',
+            key: 'TenDoiTac',
+            title: 'Khách hàng',
         },
         {
-            key:    'ThanhTien',
-            title:  'Số tiền',
+            key: 'ThanhTien',
+            title: 'Số tiền',
             render: (row) => formatCurrency(row.ThanhTien),
         },
         {
-            key:    'MaHT',
-            title:  'Hình thức TT',
+            key: 'MaHT',
+            title: 'Hình thức TT',
             render: (row) => row.TenHT || row.MaHT || '',
         },
         {
-            key:    'GhiChu',
-            title:  'Ghi chú',
+            key: 'GhiChu',
+            title: 'Ghi chú',
             render: (row) => row.GhiChu || '',
         },
     ];

@@ -8,7 +8,7 @@ import htttService from '../../../services/hinhthucthanhtoan.service';
 import TKThuTable from './TKThuTable';
 import TKThuSearch from './TKThuSearch';
 import Loading from '../../common/Loading/Loading';
-import GetWeekRange from '../../../untils/getWeekRange';
+import GetWeekRange from '../../../utils/getWeekRange';
 
 import '../../../styles/thongkeSearch.scss';
 

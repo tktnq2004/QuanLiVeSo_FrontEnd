@@ -1,4 +1,4 @@
-import formatCurrency from '../../../untils/formatCurrency';
+import formatCurrency from '../../../utils/formatCurrency';
 
 const CongNoTable = ({ records }) => {
 

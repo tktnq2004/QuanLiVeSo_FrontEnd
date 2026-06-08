@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import socaiService       from '../../../services/socai.service';
-import doitacService      from '../../../services/doitac.service';
+import socaiService from '../../../services/socai.service';
+import doitacService from '../../../services/doitac.service';
 import dotphathanhService from '../../../services/dotphathanh.service';
 
-import TKNhapTable  from './TKNhapTable';
+import TKNhapTable from './TKNhapTable';
 import TKNhapSearch from './TKNhapSearch';
-import Loading      from '../../common/Loading/Loading';
-import GetWeekRange from '../../../untils/getWeekRange';
+import Loading from '../../common/Loading/Loading';
+import GetWeekRange from '../../../utils/getWeekRange';
 
 import '../../../styles/thongkeSearch.scss';
 
@@ -16,13 +16,13 @@ const TKNhapList = () => {
 
     const [records, setRecords] = useState([]);
     const [doiTacs, setDoiTacs] = useState([]);
-    const [kyXos,   setKyXos]   = useState([]);
+    const [kyXos, setKyXos] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({
         ...GetWeekRange(),
         MaDoiTac: '',
-        MaKyXo:   '',
+        MaKyXo: '',
     });
 
     const fetchData = async () => {
@@ -56,7 +56,7 @@ const TKNhapList = () => {
 
             const ngay = item.NgayGiao?.split('T')[0];
 
-            if (filters.TuNgay  && ngay < filters.TuNgay)
+            if (filters.TuNgay && ngay < filters.TuNgay)
                 return false;
 
             if (filters.DenNgay && ngay > filters.DenNgay)
@@ -65,7 +65,7 @@ const TKNhapList = () => {
             if (filters.MaDoiTac && item.MaDoiTac !== filters.MaDoiTac)
                 return false;
 
-            if (filters.MaKyXo  && item.MaKyXo !== filters.MaKyXo)
+            if (filters.MaKyXo && item.MaKyXo !== filters.MaKyXo)
                 return false;
 
             return true;
