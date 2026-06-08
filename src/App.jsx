@@ -17,13 +17,13 @@ import BanVe from './views/nghiepvu/BanVe';
 import ThuVe from './views/nghiepvu/ThuVe';
 import ThuTien from './views/nghiepvu/ThuTien';
 import ChiTien from './views/nghiepvu/ChiTien';
-import TKNhap from './views/thongke/thongkenhap';
-import TKBan from './views/thongke/thongkeban';
-import TKChi from './views/thongke/thongkechi';
-import TKThu from './views/thongke/thongkethu';
-import TKLoiNhuan from './views/thongke/thongkeloinhuan';
-import TKCongNo from './views/thongke/congno';
-import TKChiTietCongNo from './views/thongke/chitietcongno';
+import TKNhap from './views/thongke/ThongKeNhap';
+import TKBan from './views/thongke/ThongKeBan';
+import TKChi from './views/thongke/ThongKeChi';
+import TKThu from './views/thongke/ThongKeThu';
+import TKLoiNhuan from './views/thongke/ThongKeLoiNhuan';
+import TKCongNo from './views/thongke/CongNo';
+import TKChiTietCongNo from './views/thongke/ChiTietCongNo';
 const App = () => {
     return (
         <BrowserRouter>
